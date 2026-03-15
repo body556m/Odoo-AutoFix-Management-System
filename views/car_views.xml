@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_autofix_car_form" model="ir.ui.view">
+        <field name="name">autofix.car.form</field>
+        <field name="model">autofix.car</field>
+        <field name="arch" type="xml">
+            <form string="Car">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Plate Number (e.g. 123 ABC)"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="left_details">
+                            <field name="partner_id"/>
+                            <field name="brand"/>
+                            <field name="model"/>
+                            <field name="year"/>
+                        </group>
+                        <group name="right_details">
+                            <field name="vin"/>
+                            <field name="mileage"/>
+                            <field name="color"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="General Notes..."/>
+                        </page>
+                        <!-- Receptions page commented out for now because its model doesn't exist yet -->
+                        <!--
+                        <page string="Service Receptions" name="receptions">
+                            <field name="reception_ids">
+                                <tree>
+                                    <field name="name"/>
+                                </tree>
+                            </field>
+                        </page>
+                        -->
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_autofix_car_tree" model="ir.ui.view">
+        <field name="name">autofix.car.tree</field>
+        <field name="model">autofix.car</field>
+        <field name="arch" type="xml">
+            <tree string="Cars">
+                <field name="name"/>
+                <field name="brand"/>
+                <field name="model"/>
+                <field name="year"/>
+                <field name="partner_id"/>
+                <field name="mileage"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_autofix_car_search" model="ir.ui.view">
+        <field name="name">autofix.car.search</field>
+        <field name="model">autofix.car</field>
+        <field name="arch" type="xml">
+            <search string="Search Cars">
+                <field name="name" string="Plate / Brand / Model" filter_domain="['|', '|', ('name', 'ilike', self), ('brand', 'ilike', self), ('model', 'ilike', self)]"/>
+                <field name="brand"/>
+                <field name="model"/>
+                <field name="partner_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Brand" name="group_brand" context="{'group_by': 'brand'}"/>
+                    <filter string="Owner" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Year" name="group_year" context="{'group_by': 'year'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>
