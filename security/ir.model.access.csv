@@ -1,2 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_autofix_car_user,access_autofix_car_user,model_autofix_car,base.group_user,1,1,1,1
+access_autofix_service_reception_user,access_autofix_service_reception_user,model_autofix_service_reception,base.group_user,1,1,1,1
+access_autofix_work_order_user,access_autofix_work_order_user,model_autofix_work_order,base.group_user,1,1,1,1
+access_autofix_petty_cash_user,access_autofix_petty_cash_user,model_autofix_petty_cash,base.group_user,1,1,1,1

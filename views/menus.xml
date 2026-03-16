@@ -25,5 +25,65 @@
                   parent="autofix_menu_root"
                   action="action_autofix_car"
                   sequence="10"/>
+
+        <!-- Action for service receptions -->
+        <record id="action_autofix_service_reception" model="ir.actions.act_window">
+            <field name="name">Service Receptions</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.service.reception</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new Service Reception!
+              </p>
+            </field>
+        </record>
+
+        <!-- Menu for service receptions -->
+        <menuitem id="autofix_reception_menu"
+                  name="Service Receptions"
+                  parent="autofix_menu_root"
+                  action="action_autofix_service_reception"
+                  sequence="20"/>
+
+        <!-- Action for work orders -->
+        <record id="action_autofix_work_order" model="ir.actions.act_window">
+            <field name="name">Work Orders</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.work.order</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new Work Order!
+              </p>
+            </field>
+        </record>
+
+        <!-- Menu for work orders -->
+        <menuitem id="autofix_work_order_menu"
+                  name="Work Orders"
+                  parent="autofix_menu_root"
+                  action="action_autofix_work_order"
+                  sequence="30"/>
+
+        <!-- Action for petty cash -->
+        <record id="action_autofix_petty_cash" model="ir.actions.act_window">
+            <field name="name">Petty Cash</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.petty.cash</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Record a new expense!
+              </p>
+            </field>
+        </record>
+
+        <!-- Menu for petty cash -->
+        <menuitem id="autofix_petty_cash_menu"
+                  name="Petty Cash"
+                  parent="autofix_menu_root"
+                  action="action_autofix_petty_cash"
+                  sequence="40"/>
     </data>
 </odoo>

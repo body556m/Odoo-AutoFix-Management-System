@@ -29,16 +29,20 @@
                         <page string="Notes" name="notes">
                             <field name="notes" placeholder="General Notes..."/>
                         </page>
-                        <!-- Receptions page commented out for now because its model doesn't exist yet -->
-                        <!--
                         <page string="Service Receptions" name="receptions">
                             <field name="reception_ids">
                                 <tree>
                                     <field name="name"/>
+                                    <field name="date_received"/>
+                                    <field name="mileage_on_arrival"/>
+                                    <field name="state" widget="badge"
+                                           decoration-info="state == 'draft'"
+                                           decoration-warning="state == 'in_progress'"
+                                           decoration-success="state == 'done'"
+                                           decoration-danger="state == 'cancelled'"/>
                                 </tree>
                             </field>
                         </page>
-                        -->
                     </notebook>
                 </sheet>
             </form>
