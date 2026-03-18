@@ -7,6 +7,9 @@
         <field name="arch" type="xml">
             <form string="Service Reception">
                 <header>
+                    <button name="action_create_invoice" string="Create Invoice" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'done' or invoice_count &gt; 0"/>
                     <button name="action_start" string="Start" type="object"
                             class="oe_highlight"
                             invisible="state != 'draft'"/>
@@ -20,6 +23,13 @@
                     <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,done"/>
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoices" type="object"
+                                class="oe_stat_button" icon="fa-pencil-square-o"
+                                invisible="invoice_count == 0">
+                            <field name="invoice_count" widget="statinfo" string="Invoices"/>
+                        </button>
+                    </div>
                     <div class="oe_title">
                         <h1>
                             <field name="name" readonly="1"/>
@@ -34,6 +44,7 @@
                         </group>
                         <group name="right_details">
                             <field name="mileage_on_arrival"/>
+                            <field name="total_cost" readonly="1"/>
                         </group>
                     </group>
                     <group>
@@ -53,6 +64,8 @@
                                            decoration-danger="state == 'cancelled'"/>
                                     <field name="estimated_hours" widget="float_time"/>
                                     <field name="actual_hours" widget="float_time"/>
+                                    <field name="labor_cost"/>
+                                    <field name="total_cost" sum="Total"/>
                                 </tree>
                             </field>
                         </page>
@@ -76,10 +89,14 @@
         <field name="model">autofix.service.reception</field>
         <field name="arch" type="xml">
             <tree string="Service Receptions" decoration-info="state == 'draft'" decoration-success="state == 'done'" decoration-muted="state == 'cancelled'">
+                <header>
+                    <button name="action_print_invoices" type="object" string="Print Invoices"/>
+                </header>
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="car_id"/>
                 <field name="date_received"/>
+                <field name="total_cost"/>
                 <field name="state" widget="badge"
                        decoration-info="state == 'draft'"
                        decoration-warning="state == 'in_progress'"

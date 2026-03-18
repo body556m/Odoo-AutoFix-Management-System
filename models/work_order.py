@@ -21,6 +21,20 @@ class AutoFixWorkOrder(models.Model):
     estimated_hours = fields.Float(string='Estimated Hours')
     actual_hours = fields.Float(string='Actual Hours')
     notes = fields.Text(string='Notes')
+    labor_cost = fields.Float(string='Labor Cost')
+    expense_ids = fields.One2many('autofix.work.order.expense', 'work_order_id', string='Expenses')
+    total_expenses = fields.Float(string='Total Expenses', compute='_compute_total_expenses', store=True)
+    total_cost = fields.Float(string='Total Cost', compute='_compute_total_cost', store=True)
+
+    @api.depends('expense_ids.amount')
+    def _compute_total_expenses(self):
+        for rec in self:
+            rec.total_expenses = sum(rec.expense_ids.mapped('amount'))
+
+    @api.depends('labor_cost', 'total_expenses')
+    def _compute_total_cost(self):
+        for rec in self:
+            rec.total_cost = rec.labor_cost + rec.total_expenses
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -44,3 +58,13 @@ class AutoFixWorkOrder(models.Model):
     def action_reset_to_pending(self):
         for rec in self:
             rec.state = 'pending'
+
+
+
+class AutoFixWorkOrderExpense(models.Model):
+    _name = 'autofix.work.order.expense'
+    _description = 'Work Order Expense'
+
+    work_order_id = fields.Many2one('autofix.work.order', string='Work Order', required=True, ondelete='cascade')
+    description = fields.Char(string='Description', required=True)
+    amount = fields.Float(string='Amount', required=True)

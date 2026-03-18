@@ -35,12 +35,25 @@
                             <field name="employee_id"/>
                             <field name="estimated_hours" widget="float_time"/>
                             <field name="actual_hours" widget="float_time"/>
+                            <field name="labor_cost"/>
                         </group>
                     </group>
                     <group>
                         <field name="description" placeholder="Work description..."/>
                     </group>
                     <notebook>
+                        <page string="Expenses" name="expenses">
+                            <field name="expense_ids">
+                                <tree editable="bottom">
+                                    <field name="description"/>
+                                    <field name="amount"/>
+                                </tree>
+                            </field>
+                            <group class="oe_subtotal_footer">
+                                <field name="total_expenses" readonly="1"/>
+                                <field name="total_cost" readonly="1" class="oe_subtotal_footer_separator"/>
+                            </group>
+                        </page>
                         <page string="Notes" name="notes">
                             <field name="notes" placeholder="Additional notes..."/>
                         </page>
@@ -70,6 +83,8 @@
                        decoration-success="state == 'done'"
                        decoration-danger="state == 'cancelled'"/>
                 <field name="estimated_hours" widget="float_time"/>
+                <field name="labor_cost"/>
+                <field name="total_cost" sum="Total"/>
             </tree>
         </field>
     </record>

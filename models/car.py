@@ -13,7 +13,7 @@ class AutoFixCar(models.Model):
     color = fields.Char(string='Color')
     vin = fields.Char(string='VIN / Chassis')
     mileage = fields.Integer(string='Initial Mileage', required=True)
-    partner_id = fields.Many2one('res.partner', string='Owner', required=True, domain=[('customer_rank', '>', 0)])
+    partner_id = fields.Many2one('res.partner', string='Owner', required=True)
     reception_ids = fields.One2many('autofix.service.reception', 'car_id', string='Receptions')
     notes = fields.Text(string='Notes')
 

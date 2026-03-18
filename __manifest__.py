@@ -3,9 +3,10 @@
     'author': "Abdo Mohamed",
     'category': "Services",
     'version': '17.0.0.1.0',
-    'depends': ['base', 'mail', 'hr'],
+    'depends': ['base', 'mail', 'hr', 'account'],
     'data': [
         'data/sequence.xml',
+        'data/server_actions.xml',
         'security/ir.model.access.csv',
         'views/car_views.xml',
         'views/service_reception_views.xml',
