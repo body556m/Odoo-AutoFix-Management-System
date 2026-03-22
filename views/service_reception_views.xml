@@ -89,9 +89,6 @@
         <field name="model">autofix.service.reception</field>
         <field name="arch" type="xml">
             <tree string="Service Receptions" decoration-info="state == 'draft'" decoration-success="state == 'done'" decoration-muted="state == 'cancelled'">
-                <header>
-                    <button name="action_print_invoices" type="object" string="Print Invoices"/>
-                </header>
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="car_id"/>

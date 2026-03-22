@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import UserError
+from datetime import date
 
 
 class AutoFixServiceReception(models.Model):
@@ -131,3 +132,95 @@ class AutoFixServiceReception(models.Model):
         if not invoices:
             raise UserError('No invoices found for the selected receptions.')
         return self.env.ref('account.account_invoices').report_action(invoices)
+
+    @api.model
+    def get_dashboard_data(self):
+        """Return all KPI data for the management dashboard."""
+        today = date.today()
+        first_day_of_month = today.replace(day=1)
+
+        Car = self.env['autofix.car']
+        Reception = self.env['autofix.service.reception']
+        WorkOrder = self.env['autofix.work.order']
+        Invoice = self.env['account.move']
+        PettyCash = self.env['autofix.petty.cash']
+
+        # --- KPI counts ---
+        total_cars = Car.search_count([])
+        today_receptions = Reception.search_count([('date_received', '=', today)])
+        open_work_orders = WorkOrder.search_count([('state', 'in', ['pending', 'in_progress'])])
+        done_work_orders_month = WorkOrder.search_count([
+            ('state', '=', 'done'),
+            ('write_date', '>=', first_day_of_month),
+            ('write_date', '<=', today),
+        ])
+
+        # --- Revenue: paid customer invoices this month ---
+        paid_invoices = Invoice.search([
+            ('move_type', '=', 'out_invoice'),
+            ('payment_state', '=', 'paid'),
+            ('invoice_date', '>=', first_day_of_month),
+            ('invoice_date', '<=', today),
+        ])
+        month_revenue = sum(paid_invoices.mapped('amount_total'))
+
+        # --- Petty Cash this month ---
+        petty_records = PettyCash.search([
+            ('date', '>=', first_day_of_month),
+            ('date', '<=', today),
+        ])
+        month_petty_cash = sum(petty_records.mapped('amount'))
+
+        # --- Work Order expenses this month ---
+        month_work_orders = WorkOrder.search([
+            ('create_date', '>=', first_day_of_month),
+            ('create_date', '<=', today),
+        ])
+        month_wo_expenses = sum(month_work_orders.mapped('total_cost'))
+
+        # --- Open Work Orders table ---
+        open_wos = WorkOrder.search(
+            [('state', 'in', ['pending', 'in_progress'])],
+            order='create_date asc',
+        )
+        open_work_orders_list = []
+        for wo in open_wos:
+            open_work_orders_list.append({
+                'name': wo.name,
+                'car': wo.car_id.display_name or '',
+                'mechanic': wo.employee_id.name or '',
+                'state': wo.state,
+                'create_date': wo.create_date.strftime('%Y-%m-%d') if wo.create_date else '',
+            })
+
+        # --- Mechanic Performance this month ---
+        all_month_wos = WorkOrder.search([
+            ('create_date', '>=', first_day_of_month),
+            ('create_date', '<=', today),
+        ])
+        mechanic_data = {}
+        for wo in all_month_wos:
+            emp_name = wo.employee_id.name or 'Unassigned'
+            if emp_name not in mechanic_data:
+                mechanic_data[emp_name] = {'done': 0, 'open': 0}
+            if wo.state == 'done':
+                mechanic_data[emp_name]['done'] += 1
+            elif wo.state in ('pending', 'in_progress'):
+                mechanic_data[emp_name]['open'] += 1
+
+        mechanic_performance = [
+            {'mechanic': name, 'done': vals['done'], 'open': vals['open']}
+            for name, vals in mechanic_data.items()
+        ]
+
+        return {
+            'total_cars': total_cars,
+            'today_receptions': today_receptions,
+            'open_work_orders': open_work_orders,
+            'done_work_orders_month': done_work_orders_month,
+            'month_revenue': month_revenue,
+            'month_petty_cash': month_petty_cash,
+            'month_wo_expenses': month_wo_expenses,
+            'open_work_orders_list': open_work_orders_list,
+            'mechanic_performance': mechanic_performance,
+        }

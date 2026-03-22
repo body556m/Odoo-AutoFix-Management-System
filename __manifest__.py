@@ -15,4 +15,11 @@
         'views/menus.xml',
     ],
     'application': True,
+    'assets': {
+        'web.assets_backend': [
+            'autofix/static/src/css/dashboard.css',
+            'autofix/static/src/js/dashboard.js',
+            'autofix/static/src/xml/dashboard.xml',
+        ],
+    },
 }

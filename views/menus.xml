@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- Top menu item -->
+        <!-- Dashboard Client Action -->
+        <record id="action_autofix_dashboard" model="ir.actions.client">
+            <field name="name">AutoFix Dashboard</field>
+            <field name="tag">autofix_dashboard</field>
+        </record>
+
+        <!-- Top menu item — dashboard is the default action -->
         <menuitem id="autofix_menu_root"
                   name="AutoFix"
+                  action="action_autofix_dashboard"
                   sequence="10"/>
 
         <!-- Action for cars -->

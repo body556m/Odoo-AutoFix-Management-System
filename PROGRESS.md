@@ -20,10 +20,14 @@
   - زرار "Create Invoice" في header الـ form (يظهر لما state = done ومفيش فاتورة)
   - زرار "Create Invoices" في header الـ tree للطلبات المتعددة
   - account module اتضاف في depends
-  - إضافة زرار "Print Invoices" في الـ tree view header لطباعة فواتير الطلبات المتعددة كـ PDF
+- Server Action — Create Invoices من الـ tree view (Action menu) ✅
+- Management Dashboard — OWL component ✅
+  - 7 KPI cards تفتح filtered list views لما تتضغط عليها
+  - جدول الـ work orders المفتوحة
+  - جدول أداء الميكانيكيين الشهر ده
+  - default action للـ AutoFix menu
 
 ## Pending
-- Management Dashboard: إحصائيات المدير
 
 ## Standard Modules Used
 base, mail, hr, account
@@ -35,3 +39,25 @@ base, mail, hr, account
 - mechanics بيتمثلوا بـ hr.employee مش res.partner
 - الفواتير بتتعمل من account.move مباشرة — مفيش custom invoicing
 - كل work order بيبقى سطر في الفاتورة (labor cost) + سطر لكل expense
+
+## Phase 2 Plan
+
+### ترتيب التنفيذ
+1. Management Dashboard ✅
+2. PDF Report — فاتورة الصيانة
+3. Cron — تنبيه بعد 15 يوم / إلغاء تلقائي بعد 30 يوم لو ما اتدفعش
+4. Stock Integration — ربط work order بالمخزن
+5. User Groups — Manager / Mechanic / Receptionist
+6. Cron — تقرير يومي للمدير
+7. HR Payroll — مرتبات الميكانيكيين (آخر feature)
+
+### Dashboard KPIs
+- كام عربية مسجلة إجمالاً
+- كام reception النهارده
+- كام أمر شغل مفتوح
+- كام أمر خلص الشهر ده
+- إجمالي الإيرادات الشهر ده
+- إجمالي النثريات الشهر ده
+- إجمالي مصاريف الـ work orders الشهر ده
+- جدول الـ work orders المفتوحة
+- جدول أداء الميكانيكيين الشهر ده
