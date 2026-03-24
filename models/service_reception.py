@@ -29,11 +29,17 @@ class AutoFixServiceReception(models.Model):
     invoice_ids = fields.Many2many('account.move', string='Invoices', copy=False)
     invoice_count = fields.Integer(string='Invoice Count', compute='_compute_invoice_count')
     total_cost = fields.Float(string='Total Cost', compute='_compute_total_cost', store=True)
+    total_labor_cost = fields.Float(string='Total Labor Cost', compute='_compute_total_labor_cost', store=True)
 
     @api.depends('work_order_ids.total_cost')
     def _compute_total_cost(self):
         for rec in self:
             rec.total_cost = sum(rec.work_order_ids.mapped('total_cost'))
+
+    @api.depends('work_order_ids.labor_cost')
+    def _compute_total_labor_cost(self):
+        for rec in self:
+            rec.total_labor_cost = sum(rec.work_order_ids.mapped('labor_cost'))
 
     @api.depends('invoice_ids')
     def _compute_invoice_count(self):
@@ -132,6 +138,13 @@ class AutoFixServiceReception(models.Model):
         if not invoices:
             raise UserError('No invoices found for the selected receptions.')
         return self.env.ref('account.account_invoices').report_action(invoices)
+
+    def action_print_maintenance_report(self):
+        """Print Maintenance Invoice PDF report."""
+        records = self.filtered(lambda r: r.invoice_count > 0)
+        if not records:
+            raise UserError('No receptions with invoices found in the selection.')
+        return self.env.ref('autofix.action_report_maintenance_invoice').report_action(records)
 
     @api.model
     def get_dashboard_data(self):

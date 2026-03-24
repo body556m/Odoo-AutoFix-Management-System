@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="maintenance_invoice_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <!-- Report Title -->
+                        <div class="text-center mb-4">
+                            <h2><strong>Maintenance Invoice</strong></h2>
+                        </div>
+
+                        <!-- Reference & Date -->
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Reference:</strong> <span t-field="doc.name"/>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>Date:</strong> <span t-field="doc.date_received"/>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <!-- Customer & Car Section -->
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <h5><strong>Customer Information</strong></h5>
+                                <p class="mb-1">
+                                    <strong>Name:</strong> <span t-field="doc.partner_id"/>
+                                </p>
+                            </div>
+                            <div class="col-6">
+                                <h5><strong>Vehicle Information</strong></h5>
+                                <p class="mb-1">
+                                    <strong>Brand / Model:</strong>
+                                    <span t-field="doc.car_id.brand"/> / <span t-field="doc.car_id.model"/>
+                                </p>
+                                <p class="mb-1">
+                                    <strong>Plate Number:</strong> <span t-field="doc.car_id.name"/>
+                                </p>
+                                <p class="mb-1" t-if="doc.car_id.vin">
+                                    <strong>VIN:</strong> <span t-field="doc.car_id.vin"/>
+                                </p>
+                                <p class="mb-1">
+                                    <strong>Mileage on Arrival:</strong>
+                                    <span t-esc="'{:,.0f}'.format(doc.mileage_on_arrival)"/> km
+                                </p>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <!-- Complaint -->
+                        <div class="mb-3">
+                            <h5><strong>Complaint</strong></h5>
+                            <p t-field="doc.complaint"/>
+                        </div>
+
+                        <!-- Work Performed -->
+                        <div class="mb-3" t-if="doc.work_order_ids">
+                            <h5><strong>Work Performed</strong></h5>
+                            <ul>
+                                <t t-foreach="doc.work_order_ids" t-as="wo">
+                                    <li><span t-esc="wo.description"/></li>
+                                </t>
+                            </ul>
+                        </div>
+
+                        <hr/>
+
+                        <!-- Work Orders Table -->
+                        <div class="mb-4" t-if="doc.work_order_ids">
+                            <h5><strong>Work Orders</strong></h5>
+                            <table class="table table-sm table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="text-center" style="width: 5%;">#</th>
+                                        <th>Work Description</th>
+                                        <th>Mechanic</th>
+                                        <th class="text-end">Labor Cost</th>
+                                        <th class="text-end">Expenses Total</th>
+                                        <th class="text-end">Line Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.work_order_ids" t-as="wo">
+                                        <tr>
+                                            <td class="text-center"><span t-esc="wo_index + 1"/></td>
+                                            <td><span t-esc="wo.description"/></td>
+                                            <td><span t-esc="wo.employee_id.name or ''"/></td>
+                                            <td class="text-end"><span t-esc="'{:,.2f}'.format(wo.labor_cost)"/></td>
+                                            <td class="text-end"><span t-esc="'{:,.2f}'.format(wo.total_expenses)"/></td>
+                                            <td class="text-end"><span t-esc="'{:,.2f}'.format(wo.total_cost)"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Expenses Detail Table -->
+                        <t t-set="has_expenses" t-value="any(wo.expense_ids for wo in doc.work_order_ids)"/>
+                        <div class="mb-4" t-if="has_expenses">
+                            <h5><strong>Expenses Detail</strong></h5>
+                            <table class="table table-sm table-bordered">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Work Order Ref</th>
+                                        <th>Expense Description</th>
+                                        <th class="text-end">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.work_order_ids" t-as="wo">
+                                        <t t-foreach="wo.expense_ids" t-as="exp">
+                                            <tr>
+                                                <td><span t-esc="wo.name"/></td>
+                                                <td><span t-esc="exp.description"/></td>
+                                                <td class="text-end"><span t-esc="'{:,.2f}'.format(exp.amount)"/></td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Totals -->
+                        <div class="row mb-4">
+                            <div class="col-7"/>
+                            <div class="col-5">
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Total Labor Cost</strong></td>
+                                        <td class="text-end"><span t-esc="'{:,.2f}'.format(doc.total_labor_cost)"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Expenses</strong></td>
+                                        <td class="text-end"><span t-esc="'{:,.2f}'.format(doc.total_cost - doc.total_labor_cost)"/></td>
+                                    </tr>
+                                    <tr class="border-top" style="border-top: 2px solid #000 !important;">
+                                        <td><h5 class="mb-0"><strong>Grand Total</strong></h5></td>
+                                        <td class="text-end">
+                                            <h5 class="mb-0"><strong><span t-esc="'{:,.2f}'.format(doc.total_cost)"/></strong></h5>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Notes -->
+                        <div class="mb-4" t-if="doc.notes">
+                            <h5><strong>Notes</strong></h5>
+                            <p t-field="doc.notes"/>
+                        </div>
+
+                        <!-- Signature -->
+                        <div class="row mt-5">
+                            <div class="col-6">
+                                <p>___________________________</p>
+                                <p><strong>Customer Signature</strong></p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <p>___________________________</p>
+                                <p><strong>Authorized Signature</strong></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

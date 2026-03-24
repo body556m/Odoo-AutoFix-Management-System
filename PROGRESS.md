@@ -20,6 +20,11 @@
   - زرار "Create Invoice" في header الـ form (يظهر لما state = done ومفيش فاتورة)
   - زرار "Create Invoices" في header الـ tree للطلبات المتعددة
   - account module اتضاف في depends
+- PDF Report — Maintenance Invoice ✅
+  - QWeb PDF report طباعة فاتورة الصيانة من form view
+  - زرار "Print Invoice" في header الـ form (يظهر لما invoice_count > 0)
+  - زرار "Print Invoices" في header الـ tree (بيفلتر الريكوردات اللي عليها فواتير)
+  - بيعرض: بيانات العميل والعربية، الشكوى، الأعمال، جدول أوامر الشغل، تفاصيل المصاريف، الإجماليات
 - Server Action — Create Invoices من الـ tree view (Action menu) ✅
 - Management Dashboard — OWL component ✅
   - 7 KPI cards تفتح filtered list views لما تتضغط عليها
@@ -44,7 +49,7 @@ base, mail, hr, account
 
 ### ترتيب التنفيذ
 1. Management Dashboard ✅
-2. PDF Report — فاتورة الصيانة
+2. PDF Report — فاتورة الصيانة ✅
 3. Cron — تنبيه بعد 15 يوم / إلغاء تلقائي بعد 30 يوم لو ما اتدفعش
 4. Stock Integration — ربط work order بالمخزن
 5. User Groups — Manager / Mechanic / Receptionist
