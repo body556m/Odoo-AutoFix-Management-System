@@ -1,6 +1,6 @@
 from odoo import models, fields, api
 from odoo.exceptions import UserError
-from datetime import date
+from datetime import date, timedelta
 
 
 class AutoFixServiceReception(models.Model):
@@ -237,3 +237,122 @@ class AutoFixServiceReception(models.Model):
             'open_work_orders_list': open_work_orders_list,
             'mechanic_performance': mechanic_performance,
         }
+
+    # ============================================================
+    # Cron Jobs for Unpaid Invoice Management
+    # ============================================================
+
+    def _cron_warn_unpaid_invoices(self):
+        """
+        Cron Job: 15-Day Warning for Unpaid Invoices
+        Trigger: daily
+        Logic: Find all receptions where:
+          - state = 'done'
+          - invoice_count > 0
+          - date_received is exactly 15 days ago (or more than 15 but less than 30)
+          - All linked invoices have payment_state != 'paid'
+        Actions:
+          1. Post a chatter message on the reception
+          2. Send an email to reception.partner_id.email
+          3. Create an mail.activity on the reception
+        """
+        today = fields.Date.today()
+        date_15_days_ago = today - timedelta(days=15)
+        date_30_days_ago = today - timedelta(days=30)
+
+        # Find receptions: done, with invoices, date between 15-30 days ago
+        receptions = self.search([
+            ('state', '=', 'done'),
+            ('invoice_count', '>', 0),
+            ('date_received', '<=', date_15_days_ago),
+            ('date_received', '>', date_30_days_ago),
+        ])
+
+        for reception in receptions:
+            # Check if all linked invoices are unpaid
+            unpaid_invoices = reception.invoice_ids.filtered(
+                lambda inv: inv.payment_state != 'paid'
+            )
+            if not unpaid_invoices:
+                continue
+
+            # Action 1: Post a chatter message
+            message_body = (
+                "⚠️ Payment Overdue: Invoice for this reception has not been paid.\n"
+                f"Reception date: {reception.date_received}. Please follow up with the customer."
+            )
+            reception.sudo().message_post(body=message_body)
+
+            # Action 2: Send an email to the customer
+            if reception.partner_id.email:
+                mail_values = {
+                    'subject': f"Payment Reminder - {reception.name}",
+                    'body_html': f'''
+                        <p>Dear {reception.partner_id.name},</p>
+                        <p>This is a friendly reminder that your invoice for reception <strong>{reception.name}</strong> 
+                        (dated {reception.date_received}) has not been paid yet.</p>
+                        <p>Please follow up with us at your earliest convenience to settle the payment.</p>
+                        <p>Thank you for your business!</p>
+                    ''',
+                    'email_from': self.env.user.company_id.email or 'noreply@example.com',
+                    'email_to': reception.partner_id.email,
+                }
+                self.env['mail.mail'].sudo().create(mail_values)
+
+            # Action 3: Create a mail.activity assigned to SUPERUSER
+            self.env['mail.activity'].sudo().create({
+                'res_id': reception.id,
+                'res_model_id': self.env['ir.model']._get('autofix.service.reception').id,
+                'activity_type_id': self.env.ref('mail.mail_activity_data_todo').id,
+                'summary': 'Follow up: unpaid invoice over 15 days',
+                'user_id': self.env.ref('base.user_admin').id,  # SUPERUSER
+            })
+
+    def _cron_cancel_unpaid_invoices(self):
+        """
+        Cron Job: 30-Day Auto-Cancellation for Unpaid Invoices
+        Trigger: daily
+        Logic: Find all receptions where:
+          - state = 'done'
+          - invoice_count > 0
+          - date_received is 30 or more days ago
+          - All linked invoices have payment_state != 'paid'
+        Actions:
+          1. Cancel all linked invoices
+          2. Set reception.state = 'cancelled'
+          3. Post a chatter message on the reception
+        """
+        today = fields.Date.today()
+        date_30_days_ago = today - timedelta(days=30)
+
+        # Find receptions: done, with invoices, date 30+ days ago
+        receptions = self.search([
+            ('state', '=', 'done'),
+            ('invoice_count', '>', 0),
+            ('date_received', '<=', date_30_days_ago),
+        ])
+
+        for reception in receptions:
+            # Check if all linked invoices are unpaid
+            unpaid_invoices = reception.invoice_ids.filtered(
+                lambda inv: inv.payment_state != 'paid'
+            )
+            if not unpaid_invoices:
+                continue
+
+            # Action 1: Cancel all linked invoices
+            for invoice in unpaid_invoices:
+                if invoice.state != 'cancel':
+                    # Check if invoice is posted or draft, then cancel it
+                    if invoice.state in ('posted', 'draft'):
+                        invoice.sudo().button_cancel()
+
+            # Action 2: Set reception state to cancelled
+            reception.sudo().write({'state': 'cancelled'})
+
+            # Action 3: Post a chatter message
+            message_body = (
+                "🚫 Auto-Cancelled: This reception and its invoice(s) have been "
+                "automatically cancelled after 30 days of non-payment."
+            )
+            reception.sudo().message_post(body=message_body)

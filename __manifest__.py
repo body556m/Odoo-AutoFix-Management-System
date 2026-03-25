@@ -7,6 +7,7 @@
     'data': [
         'data/sequence.xml',
         'data/server_actions.xml',
+        'data/cron.xml',
         'report/report_actions.xml',
         'report/maintenance_invoice_report.xml',
         'security/ir.model.access.csv',
