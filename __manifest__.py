@@ -3,7 +3,7 @@
     'author': "Abdo Mohamed",
     'category': "Services",
     'version': '17.0.0.1.0',
-    'depends': ['base', 'mail', 'hr', 'account'],
+    'depends': ['base', 'mail', 'hr', 'account', 'stock', 'purchase'],
     'data': [
         'data/sequence.xml',
         'data/server_actions.xml',

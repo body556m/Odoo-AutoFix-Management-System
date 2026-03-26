@@ -31,12 +31,21 @@
   - جدول الـ work orders المفتوحة
   - جدول أداء الميكانيكيين الشهر ده
   - default action للـ AutoFix menu
+- Stock Integration — spare parts tracked from stock module ✅
+  - autofix.work.order.part model (One2many)
+  - part_ids, total_parts_cost, stock_move_ids على work.order
+  - total_cost = labor_cost + total_expenses + total_parts_cost
+  - action_done() creates stock.move + autofix.work.order.expense for each part
+  - reorder point check creates purchase.order if qty_available < min_qty
+  - stock and purchase modules added to depends
 
 ## Pending
-- (none - all Phase 2 items completed!)
+- User Groups — Manager / Mechanic / Receptionist
+- Cron — تقرير يومي للمدير
+- HR Payroll — مرتبات الميكانيكيين (آخر feature)
 
 ## Standard Modules Used
-base, mail, hr, account
+base, mail, hr, account, stock, purchase
 
 ## Key Decisions
 - customer_rank domain اتشال لأن sale module مش installed
@@ -52,7 +61,7 @@ base, mail, hr, account
 1. Management Dashboard ✅
 2. PDF Report — فاتورة الصيانة ✅
 3. Cron — تنبيه بعد 15 يوم / إلغاء تلقائي بعد 30 يوم لو ما اتدفعش ✅
-4. Stock Integration — ربط work order بالمخزن
+4. Stock Integration — ربط work order بالمخزن ✅
 5. User Groups — Manager / Mechanic / Receptionist
 6. Cron — تقرير يومي للمدير
 7. HR Payroll — مرتبات الميكانيكيين (آخر feature)

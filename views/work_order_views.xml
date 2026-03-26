@@ -51,7 +51,21 @@
                             </field>
                             <group class="oe_subtotal_footer">
                                 <field name="total_expenses" readonly="1"/>
+                                <field name="total_parts_cost" readonly="1"/>
                                 <field name="total_cost" readonly="1" class="oe_subtotal_footer_separator"/>
+                            </group>
+                        </page>
+                        <page string="Parts Used" name="parts">
+                            <field name="part_ids">
+                                <tree editable="bottom">
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_price"/>
+                                    <field name="amount" readonly="1"/>
+                                </tree>
+                            </field>
+                            <group class="oe_subtotal_footer">
+                                <field name="total_parts_cost" readonly="1"/>
                             </group>
                         </page>
                         <page string="Notes" name="notes">
