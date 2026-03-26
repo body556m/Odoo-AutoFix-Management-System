@@ -16,6 +16,8 @@ class AutoFixDashboard extends Component {
             month_revenue: 0,
             month_petty_cash: 0,
             month_wo_expenses: 0,
+            stock_integration_count: 0,
+            stock_integration_qty: 0,
             open_work_orders_list: [],
             mechanic_performance: [],
         });
@@ -146,6 +148,26 @@ class AutoFixDashboard extends Component {
             domain: [
                 ["create_date", ">=", firstDay],
                 ["create_date", "<=", todayStr],
+            ],
+            target: "current",
+        });
+    }
+
+    openStockIntegration() {
+        const today = new Date();
+        const firstDay = new Date(today.getFullYear(), today.getMonth(), 1)
+            .toISOString().split("T")[0];
+        const todayStr = today.toISOString().split("T")[0];
+        this.action.doAction({
+            type: "ir.actions.act_window",
+            name: "Stock Integration (This Month)",
+            res_model: "stock.move",
+            view_mode: "list,form",
+            views: [[false, "list"], [false, "form"]],
+            domain: [
+                ["create_date", ">=", firstDay],
+                ["create_date", "<=", todayStr],
+                ["name", "ilike", "AutoFix WO:"],
             ],
             target: "current",
         });

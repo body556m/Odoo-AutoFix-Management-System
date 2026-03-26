@@ -226,6 +226,16 @@ class AutoFixServiceReception(models.Model):
             for name, vals in mechanic_data.items()
         ]
 
+        # --- Stock Integration: Stock Moves this month ---
+        StockMove = self.env['stock.move']
+        stock_moves = StockMove.search([
+            ('create_date', '>=', first_day_of_month),
+            ('create_date', '<=', today),
+            ('name', 'ilike', 'AutoFix WO:'),
+        ])
+        total_stock_moves = len(stock_moves)
+        total_parts_quantity = sum(stock_moves.mapped('product_uom_qty'))
+
         return {
             'total_cars': total_cars,
             'today_receptions': today_receptions,
@@ -236,6 +246,8 @@ class AutoFixServiceReception(models.Model):
             'month_wo_expenses': month_wo_expenses,
             'open_work_orders_list': open_work_orders_list,
             'mechanic_performance': mechanic_performance,
+            'stock_integration_count': total_stock_moves,
+            'stock_integration_qty': total_parts_quantity,
         }
 
     # ============================================================

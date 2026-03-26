@@ -50,6 +50,15 @@
                     <div class="kpi-value"><t t-esc="formatCurrency(state.month_wo_expenses)"/></div>
                     <div class="kpi-label">WO Expenses This Month</div>
                 </div>
+
+                <div class="autofix-kpi-card" t-on-click="openStockIntegration">
+                    <div class="kpi-icon"><i class="fa fa-truck"/></div>
+                    <div class="kpi-value">
+                        <t t-esc="state.stock_integration_count"/>
+                        <span class="kpi-small">(<t t-esc="state.stock_integration_qty"/> items)</span>
+                    </div>
+                    <div class="kpi-label">Stock Integration This Month</div>
+                </div>
             </div>
 
             <!-- Tables -->
