@@ -11,6 +11,7 @@
         <menuitem id="autofix_menu_root"
                   name="AutoFix"
                   action="action_autofix_dashboard"
+                  groups="group_autofix_manager"
                   sequence="10"/>
 
         <!-- Action for cars -->

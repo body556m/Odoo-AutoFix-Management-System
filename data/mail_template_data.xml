@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="mail_template_daily_summary" model="mail.template">
+            <field name="name">AutoFix Daily Summary</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="subject">AutoFix Daily Summary — </field>
+            <field name="body_html">&lt;div style="max-width:700px;margin:0 auto;font-family:Arial,Helvetica,sans-serif;color:#333;"&gt;
+                &lt;!-- Header --&gt;
+                &lt;div style="background-color:#2c3e50;color:#ffffff;padding:20px 30px;text-align:center;"&gt;
+                    &lt;h1 style="margin:0;font-size:24px;"&gt;AutoFix Management System&lt;/h1&gt;
+                    &lt;p style="margin:5px 0 0;font-size:14px;opacity:0.9;"&gt;Daily Operations Summary&lt;/p&gt;
+                &lt;/div&gt;
+
+                &lt;!-- Date Bar --&gt;
+                &lt;div style="background-color:#34495e;color:#ffffff;padding:10px 30px;font-size:13px;"&gt;
+                    &lt;strong&gt;Report Date: &lt;/strong&gt;&lt;t t-esc="today_str"/&gt;
+                &lt;/div&gt;
+
+                &lt;div style="padding:20px 30px;background-color:#f9f9f9;"&gt;
+
+                &lt;!-- Section A: Work Orders --&gt;
+                &lt;h2 style="color:#2c3e50;border-bottom:2px solid #3498db;padding-bottom:8px;font-size:18px;"&gt;Section A — Work Orders Today&lt;/h2&gt;
+                &lt;table style="width:100%;border-collapse:collapse;margin-bottom:25px;font-size:14px;"&gt;
+                    &lt;tr style="background-color:#3498db;color:#fff;"&gt;
+                        &lt;th style="padding:10px 15px;text-align:left;border:1px solid #ddd;"&gt;Metric&lt;/th&gt;
+                        &lt;th style="padding:10px 15px;text-align:right;border:1px solid #ddd;"&gt;Count&lt;/th&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;"&gt;New Work Orders&lt;/td&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;text-align:right;font-weight:bold;"&gt;&lt;t t-esc="wo_new"/&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr style="background-color:#ecf0f1;"&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;"&gt;Completed&lt;/td&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;text-align:right;font-weight:bold;color:#27ae60;"&gt;&lt;t t-esc="wo_completed"/&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;"&gt;In Progress&lt;/td&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;text-align:right;font-weight:bold;color:#f39c12;"&gt;&lt;t t-esc="wo_in_progress"/&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr style="background-color:#ecf0f1;"&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;"&gt;Pending&lt;/td&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;text-align:right;font-weight:bold;"&gt;&lt;t t-esc="wo_pending"/&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;"&gt;Cancelled&lt;/td&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;text-align:right;font-weight:bold;color:#e74c3c;"&gt;&lt;t t-esc="wo_cancelled"/&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                &lt;/table&gt;
+
+                &lt;!-- Section B: Financial Summary --&gt;
+                &lt;h2 style="color:#2c3e50;border-bottom:2px solid #27ae60;padding-bottom:8px;font-size:18px;"&gt;Section B — Financial Summary Today&lt;/h2&gt;
+                &lt;table style="width:100%;border-collapse:collapse;margin-bottom:25px;font-size:14px;"&gt;
+                    &lt;tr style="background-color:#27ae60;color:#fff;"&gt;
+                        &lt;th style="padding:10px 15px;text-align:left;border:1px solid #ddd;"&gt;Metric&lt;/th&gt;
+                        &lt;th style="padding:10px 15px;text-align:right;border:1px solid #ddd;"&gt;Value&lt;/th&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;"&gt;Invoices Created&lt;/td&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;text-align:right;font-weight:bold;"&gt;&lt;t t-esc="inv_created_count"/&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr style="background-color:#ecf0f1;"&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;"&gt;Total Amount Invoiced&lt;/td&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;text-align:right;font-weight:bold;"&gt;&lt;t t-esc="inv_total_amount"/&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;"&gt;Total Amount Collected&lt;/td&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;text-align:right;font-weight:bold;color:#27ae60;"&gt;&lt;t t-esc="inv_collected_amount"/&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr style="background-color:#ecf0f1;"&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;"&gt;Unpaid Invoices&lt;/td&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;text-align:right;font-weight:bold;color:#f39c12;"&gt;&lt;t t-esc="inv_unpaid_count"/&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;"&gt;Overdue Invoices&lt;/td&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;text-align:right;font-weight:bold;color:#e74c3c;"&gt;&lt;t t-esc="inv_overdue_count"/&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                &lt;/table&gt;
+
+                &lt;!-- Section C: Mechanic Performance --&gt;
+                &lt;h2 style="color:#2c3e50;border-bottom:2px solid #f39c12;padding-bottom:8px;font-size:18px;"&gt;Section C — Mechanic Performance Today&lt;/h2&gt;
+                &lt;t t-if="mechanic_rows"&gt;
+                &lt;table style="width:100%;border-collapse:collapse;margin-bottom:25px;font-size:14px;"&gt;
+                    &lt;tr style="background-color:#f39c12;color:#fff;"&gt;
+                        &lt;th style="padding:10px 15px;text-align:left;border:1px solid #ddd;"&gt;Mechanic&lt;/th&gt;
+                        &lt;th style="padding:10px 15px;text-align:center;border:1px solid #ddd;"&gt;Orders Handled&lt;/th&gt;
+                        &lt;th style="padding:10px 15px;text-align:center;border:1px solid #ddd;"&gt;Completed&lt;/th&gt;
+                    &lt;/tr&gt;
+                    &lt;t t-foreach="mechanic_rows" t-as="row"&gt;
+                    &lt;tr t-att-style="'background-color:#ecf0f1;' if row_index % 2 == 0 else ''"&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;"&gt;&lt;t t-esc="row['name']"/&gt;&lt;/td&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;text-align:center;"&gt;&lt;t t-esc="row['total']"/&gt;&lt;/td&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;text-align:center;font-weight:bold;color:#27ae60;"&gt;&lt;t t-esc="row['completed']"/&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;/t&gt;
+                &lt;/table&gt;
+                &lt;/t&gt;
+                &lt;t t-else=""&gt;
+                &lt;p style="color:#7f8c8d;font-style:italic;font-size:14px;"&gt;No mechanic activity recorded today&lt;/p&gt;
+                &lt;/t&gt;
+
+                &lt;!-- Section D: Stock Alerts --&gt;
+                &lt;h2 style="color:#2c3e50;border-bottom:2px solid #e74c3c;padding-bottom:8px;font-size:18px;"&gt;Section D — Stock Alerts&lt;/h2&gt;
+                &lt;t t-if="stock_alerts"&gt;
+                &lt;table style="width:100%;border-collapse:collapse;margin-bottom:25px;font-size:14px;"&gt;
+                    &lt;tr style="background-color:#e74c3c;color:#fff;"&gt;
+                        &lt;th style="padding:10px 15px;text-align:left;border:1px solid #ddd;"&gt;Product&lt;/th&gt;
+                        &lt;th style="padding:10px 15px;text-align:center;border:1px solid #ddd;"&gt;Current Stock&lt;/th&gt;
+                        &lt;th style="padding:10px 15px;text-align:center;border:1px solid #ddd;"&gt;Reorder Point&lt;/th&gt;
+                    &lt;/tr&gt;
+                    &lt;t t-foreach="stock_alerts" t-as="alert"&gt;
+                    &lt;tr t-att-style="'background-color:#ecf0f1;' if alert_index % 2 == 0 else ''"&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;"&gt;&lt;t t-esc="alert['product_name']"/&gt;&lt;/td&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;text-align:center;color:#e74c3c;font-weight:bold;"&gt;&lt;t t-esc="alert['qty_on_hand']"/&gt;&lt;/td&gt;
+                        &lt;td style="padding:8px 15px;border:1px solid #ddd;text-align:center;"&gt;&lt;t t-esc="alert['reorder_point']"/&gt;&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;/t&gt;
+                &lt;/table&gt;
+                &lt;/t&gt;
+                &lt;t t-else=""&gt;
+                &lt;p style="color:#27ae60;font-style:italic;font-size:14px;"&gt;All stock levels are within acceptable range&lt;/p&gt;
+                &lt;/t&gt;
+
+                &lt;/div&gt;
+
+                &lt;!-- Footer --&gt;
+                &lt;div style="background-color:#2c3e50;color:#bdc3c7;padding:15px 30px;text-align:center;font-size:12px;"&gt;
+                    This is an automated message generated by AutoFix Management System. Do not reply.
+                &lt;/div&gt;
+            &lt;/div&gt;</field>
+        </record>
+    </data>
+</odoo>

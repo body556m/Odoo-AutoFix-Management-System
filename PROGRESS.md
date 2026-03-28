@@ -38,10 +38,11 @@
   - action_done() creates stock.move + autofix.work.order.expense for each part
   - reorder point check creates purchase.order if qty_available < min_qty
   - stock and purchase modules added to depends
+- Daily Summary Cron — daily email to managers with work order stats, financial summary, mechanic performance, and stock alerts ✅
 
 ## Pending
-- User Groups — Manager / Mechanic / Receptionist
-- Cron — تقرير يومي للمدير
+- User Groups — Manager / Mechanic / Receptionist ✅
+- Cron — تقرير يومي للمدير ✅
 - HR Payroll — مرتبات الميكانيكيين (آخر feature)
 
 ## Standard Modules Used
@@ -62,8 +63,8 @@ base, mail, hr, account, stock, purchase
 2. PDF Report — فاتورة الصيانة ✅
 3. Cron — تنبيه بعد 15 يوم / إلغاء تلقائي بعد 30 يوم لو ما اتدفعش ✅
 4. Stock Integration — ربط work order بالمخزن ✅
-5. User Groups — Manager / Mechanic / Receptionist
-6. Cron — تقرير يومي للمدير
+5. User Groups — Manager / Mechanic / Receptionist ✅
+6. Cron — تقرير يومي للمدير ✅
 7. HR Payroll — مرتبات الميكانيكيين (آخر feature)
 
 ### Dashboard KPIs
