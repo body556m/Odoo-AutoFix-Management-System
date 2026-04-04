@@ -9,10 +9,10 @@
                 <header>
                     <button name="action_create_invoice" string="Create Invoice" type="object"
                             class="oe_highlight"
-                            groups="group_autofix_manager"
+                            groups="autofix.group_autofix_manager"
                             invisible="state != 'done' or invoice_count &gt; 0"/>
                     <button name="action_print_maintenance_report" string="Print Invoice" type="object"
-                            groups="group_autofix_manager"
+                            groups="autofix.group_autofix_manager"
                             invisible="invoice_count == 0"/>
                     <button name="action_start" string="Start" type="object"
                             class="oe_highlight"

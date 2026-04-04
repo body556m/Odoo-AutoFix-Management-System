@@ -11,7 +11,6 @@
         <menuitem id="autofix_menu_root"
                   name="AutoFix"
                   action="action_autofix_dashboard"
-                  groups="group_autofix_manager"
                   sequence="10"/>
 
         <!-- Action for cars -->
@@ -93,5 +92,32 @@
                   parent="autofix_menu_root"
                   action="action_autofix_petty_cash"
                   sequence="40"/>
+
+        <!-- Action for inventory audit -->
+        <record id="action_autofix_inventory_audit_menu" model="ir.actions.act_window">
+            <field name="name">Inventory Audits</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.inventory.audit</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new Inventory Audit!
+              </p>
+            </field>
+        </record>
+
+        <!-- Menu for inventory audit -->
+        <menuitem id="autofix_inventory_audit_menu"
+                  name="Inventory Audit"
+                  parent="autofix_menu_root"
+                  action="action_autofix_inventory_audit_menu"
+                  sequence="50"/>
+
+        <!-- Menu for generate audit wizard -->
+        <menuitem id="autofix_generate_audit_menu"
+                  name="Generate Audit"
+                  parent="autofix_menu_root"
+                  action="action_autofix_inventory_audit_wizard"
+                  sequence="51"/>
     </data>
 </odoo>

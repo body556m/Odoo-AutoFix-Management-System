@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Wizard Action -->
+        <record id="action_autofix_inventory_audit_wizard" model="ir.actions.act_window">
+            <field name="name">Generate Inventory Audit</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.inventory.audit.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <!-- Wizard View -->
+        <record id="view_autofix_inventory_audit_wizard" model="ir.ui.view">
+            <field name="name">autofix.inventory.audit.wizard.form</field>
+            <field name="model">autofix.inventory.audit.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Generate Inventory Audit">
+                    <group>
+                        <field name="period_type" widget="radio"/>
+                        <field name="reference_date"/>
+                    </group>
+                    <footer>
+                        <button name="action_generate_audit" string="Generate Audit" type="object" class="oe_highlight"/>
+                        <button string="Cancel" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Audit List Action -->
+        <record id="action_autofix_inventory_audit" model="ir.actions.act_window">
+            <field name="name">Inventory Audits</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.inventory.audit</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                No audits yet!
+              </p>
+            </field>
+        </record>
+
+        <!-- Audit Tree View -->
+        <record id="view_autofix_inventory_audit_tree" model="ir.ui.view">
+            <field name="name">autofix.inventory.audit.tree</field>
+            <field name="model">autofix.inventory.audit</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Inventory Audits" decoration-success="state=='confirmed'" decoration-warning="state=='draft'">
+                    <field name="name"/>
+                    <field name="period_type"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="wo_total"/>
+                    <field name="inv_total_amount" sum="Total Invoiced"/>
+                    <field name="net_result" sum="Net Result"/>
+                    <field name="state" widget="badge"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Audit Search View -->
+        <record id="view_autofix_inventory_audit_search" model="ir.ui.view">
+            <field name="name">autofix.inventory.audit.search</field>
+            <field name="model">autofix.inventory.audit</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Search Inventory Audits">
+                    <field name="name"/>
+                    <filter string="Draft" name="draft" domain="[('state','=','draft')]"/>
+                    <filter string="Confirmed" name="confirmed" domain="[('state','=','confirmed')]"/>
+                    <filter string="Monthly" name="monthly" domain="[('period_type','=','monthly')]"/>
+                    <filter string="Annual" name="annual" domain="[('period_type','=','annual')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                        <filter string="Period Type" name="group_period" context="{'group_by': 'period_type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Audit Form View -->
+        <record id="view_autofix_inventory_audit_form" model="ir.ui.view">
+            <field name="name">autofix.inventory.audit.form</field>
+            <field name="model">autofix.inventory.audit</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Inventory Audit">
+                    <header>
+                        <button name="action_confirm" string="Confirm" type="object" class="oe_highlight" invisible="state == 'confirmed'"/>
+                        <button name="action_reset_to_draft" string="Reset to Draft" type="object" invisible="state == 'draft'"/>
+                        <button name="action_print_report" string="Print Report" type="object" invisible="not id"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="period_type" readonly="1"/>
+                                <field name="date_from" readonly="1"/>
+                                <field name="date_to" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="confirmed_by" readonly="1"/>
+                                <field name="confirmed_date" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="stock" string="Stock Inventory">
+                                <field name="audit_line_ids">
+                                    <tree string="Stock Lines" decoration-danger="is_low_stock==True">
+                                        <field name="product_name"/>
+                                        <field name="qty_on_hand"/>
+                                        <field name="reorder_point"/>
+                                        <field name="unit_cost"/>
+                                        <field name="stock_value"/>
+                                        <field name="consumed_qty"/>
+                                        <field name="consumed_value"/>
+                                        <field name="is_low_stock" widget="boolean_toggle"/>
+                                    </tree>
+                                </field>
+                                <group>
+                                    <group string="Totals">
+                                        <field name="total_products_tracked" readonly="1"/>
+                                        <field name="total_stock_value" readonly="1"/>
+                                        <field name="total_consumed_qty" readonly="1"/>
+                                        <field name="total_consumed_value" readonly="1"/>
+                                        <field name="low_stock_count" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="financial" string="Financial Summary">
+                                <group string="Invoices">
+                                    <field name="inv_created_count"/>
+                                    <field name="inv_total_amount"/>
+                                    <field name="inv_collected_amount"/>
+                                    <field name="inv_unpaid_amount"/>
+                                    <field name="inv_overdue_count"/>
+                                </group>
+                                <group string="Results">
+                                    <field name="petty_cash_total"/>
+                                    <field name="labor_cost_total"/>
+                                    <field name="wo_expenses_total"/>
+                                    <field name="parts_cost_total"/>
+                                    <field name="total_expenses"/>
+                                    <field name="gross_revenue"/>
+                                    <field name="net_result" style="font-weight: bold;"/>
+                                </group>
+                            </page>
+                            <page name="work_orders" string="Work Orders">
+                                <group>
+                                    <field name="wo_total"/>
+                                    <field name="wo_completed"/>
+                                    <field name="wo_cancelled"/>
+                                    <field name="wo_in_progress"/>
+                                    <field name="wo_pending"/>
+                                </group>
+                            </page>
+                            <page name="notes" string="Notes">
+                                <field name="notes"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

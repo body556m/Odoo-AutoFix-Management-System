@@ -11,6 +11,7 @@
         'data/mail_template_data.xml',
         'report/report_actions.xml',
         'report/maintenance_invoice_report.xml',
+        'report/inventory_audit_report.xml',
         'security/groups.xml',
         'security/ir.model.access.csv',
         'data/record_rules.xml',
@@ -18,6 +19,7 @@
         'views/service_reception_views.xml',
         'views/work_order_views.xml',
         'views/petty_cash_views.xml',
+        'wizard/inventory_audit_views.xml',  # ← قبل menus
         'views/menus.xml',
     ],
     'application': True,

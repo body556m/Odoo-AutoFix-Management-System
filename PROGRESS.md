@@ -28,7 +28,7 @@
 - Server Action — Create Invoices من الـ tree view (Action menu) ✅
 - Management Dashboard — OWL component ✅
   - 7 KPI cards تفتح filtered list views لما تتضغط عليها
-  - جدول الـ work orders المفتوحة
+  - ج��ول الـ work orders المفتوحة
   - جدول أداء الميكانيكيين الشهر ده
   - default action للـ AutoFix menu
 - Stock Integration — spare parts tracked from stock module ✅
@@ -39,10 +39,12 @@
   - reorder point check creates purchase.order if qty_available < min_qty
   - stock and purchase modules added to depends
 - Daily Summary Cron — daily email to managers with work order stats, financial summary, mechanic performance, and stock alerts ✅
+- Monthly/Annual Inventory Audit (الجرد) — wizard-triggered audit with stock inventory lines, financial summary, work order stats, and printable PDF report ✅
 
 ## Pending
 - User Groups — Manager / Mechanic / Receptionist ✅
 - Cron — تقرير يومي للمدير ✅
+- الجرد ✅
 - HR Payroll — مرتبات الميكانيكيين (آخر feature)
 
 ## Standard Modules Used
@@ -65,7 +67,8 @@ base, mail, hr, account, stock, purchase
 4. Stock Integration — ربط work order بالمخزن ✅
 5. User Groups — Manager / Mechanic / Receptionist ✅
 6. Cron — تقرير يومي للمدير ✅
-7. HR Payroll — مرتبات الميكانيكيين (آخر feature)
+7. الجرد ✅
+8. HR Payroll — مرتبات الميكانيكيين (آخر feature)
 
 ### Dashboard KPIs
 - كام عربية مسجلة إجمالاً
