@@ -19,7 +19,7 @@
         'views/service_reception_views.xml',
         'views/work_order_views.xml',
         'views/petty_cash_views.xml',
-        'wizard/inventory_audit_views.xml',  # ← قبل menus
+        'wizard/inventory_audit_views.xml',
         'views/menus.xml',
     ],
     'application': True,
