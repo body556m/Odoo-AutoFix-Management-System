@@ -119,5 +119,27 @@
                   parent="autofix_menu_root"
                   action="action_autofix_inventory_audit_wizard"
                   sequence="51"/>
+
+        <!-- ── HR parent menu ── -->
+        <menuitem id="autofix_hr_menu"
+                  name="HR"
+                  parent="autofix_menu_root"
+                  sequence="60"/>
+
+        <!-- Payroll Runs -->
+        <menuitem id="autofix_payroll_runs_menu"
+                  name="Payroll Runs"
+                  parent="autofix_hr_menu"
+                  action="action_autofix_payroll"
+                  groups="group_autofix_manager"
+                  sequence="61"/>
+
+        <!-- Generate Payroll -->
+        <menuitem id="autofix_generate_payroll_menu"
+                  name="Generate Payroll"
+                  parent="autofix_hr_menu"
+                  action="action_autofix_payroll_wizard"
+                  groups="group_autofix_manager"
+                  sequence="62"/>
     </data>
 </odoo>

@@ -1,6 +1,6 @@
 # AutoFix — Project Progress
 
-## Status: In Progress
+## Status: Complete
 
 ## Completed Models
 - autofix.car ✅
@@ -40,12 +40,13 @@
   - stock and purchase modules added to depends
 - Daily Summary Cron — daily email to managers with work order stats, financial summary, mechanic performance, and stock alerts ✅
 - Monthly/Annual Inventory Audit (الجرد) — wizard-triggered audit with stock inventory lines, financial summary, work order stats, and printable PDF report ✅
+- HR Payroll — monthly payroll run per mechanic with base wage, performance bonus per completed work order, manual deductions, and printable PDF payroll report ✅
 
 ## Pending
 - User Groups — Manager / Mechanic / Receptionist ✅
 - Cron — تقرير يومي للمدير ✅
 - الجرد ✅
-- HR Payroll — مرتبات الميكانيكيين (آخر feature)
+- HR Payroll — مرتبات الميكانيكيين ✅
 
 ## Standard Modules Used
 base, mail, hr, account, stock, purchase
@@ -68,7 +69,7 @@ base, mail, hr, account, stock, purchase
 5. User Groups — Manager / Mechanic / Receptionist ✅
 6. Cron — تقرير يومي للمدير ✅
 7. الجرد ✅
-8. HR Payroll — مرتبات الميكانيكيين (آخر feature)
+8. HR Payroll — مرتبات الميكانيكيين ✅
 
 ### Dashboard KPIs
 - كام عربية مسجلة إجمالاً

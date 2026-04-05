@@ -17,4 +17,13 @@
         <field name="report_file">autofix.inventory_audit_report</field>
         <field name="print_report_name">'Inventory Audit - %s' % object.name</field>
     </record>
+
+    <record id="action_report_payroll" model="ir.actions.report">
+        <field name="name">Payroll Report</field>
+        <field name="model">autofix.payroll</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">autofix.payroll_report</field>
+        <field name="report_file">autofix.payroll_report</field>
+        <field name="print_report_name">'Payroll Report - %s' % object.name</field>
+    </record>
 </odoo>
