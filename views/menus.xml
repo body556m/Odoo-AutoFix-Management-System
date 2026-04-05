@@ -9,6 +9,7 @@
 
         <!-- Top menu item — dashboard is the default action -->
         <menuitem id="autofix_menu_root"
+                  web_icon="autofix,static/description/icon.png"
                   name="AutoFix"
                   action="action_autofix_dashboard"
                   sequence="10"/>
