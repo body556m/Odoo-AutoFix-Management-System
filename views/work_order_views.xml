@@ -30,16 +30,30 @@
                             <field name="reception_id"/>
                             <field name="partner_id" readonly="1"/>
                             <field name="car_id" readonly="1"/>
+                            <field name="service_type_id"/>
+                            <field name="priority" widget="priority"/>
                         </group>
                         <group name="right_details">
                             <field name="employee_id"/>
                             <field name="estimated_hours" widget="float_time"/>
                             <field name="actual_hours" widget="float_time"/>
                             <field name="labor_cost"/>
+                            <field name="deadline"/>
+                            <field name="is_warranty_repair"/>
                         </group>
                     </group>
                     <group>
                         <field name="description" placeholder="Work description..."/>
+                    </group>
+                    <group string="Time Tracking">
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="duration" widget="float_time"/>
+                        </group>
+                        <group>
+                            <field name="warranty_id"/>
+                        </group>
                     </group>
                     <notebook>
                         <page string="Expenses" name="expenses">
@@ -68,6 +82,12 @@
                                 <field name="total_parts_cost" readonly="1"/>
                             </group>
                         </page>
+                        <page string="Quality Check" name="quality">
+                            <group>
+                                <field name="quality_check"/>
+                                <field name="quality_notes"/>
+                            </group>
+                        </page>
                         <page string="Notes" name="notes">
                             <field name="notes" placeholder="Additional notes..."/>
                         </page>
@@ -91,6 +111,8 @@
                 <field name="name"/>
                 <field name="reception_id"/>
                 <field name="employee_id"/>
+                <field name="priority" widget="priority"/>
+                <field name="deadline"/>
                 <field name="state" widget="badge"
                        decoration-info="state == 'pending'"
                        decoration-warning="state == 'in_progress'"
@@ -99,7 +121,54 @@
                 <field name="estimated_hours" widget="float_time"/>
                 <field name="labor_cost"/>
                 <field name="total_cost" sum="Total"/>
+                <field name="duration" widget="float_time"/>
             </tree>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="view_autofix_work_order_kanban" model="ir.ui.view">
+        <field name="name">autofix.work.order.kanban</field>
+        <field name="model">autofix.work.order</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" default_group_by="state">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="car_id"/>
+                <field name="employee_id"/>
+                <field name="priority"/>
+                <field name="deadline"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_details">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_head">
+                                    <strong t-esc="record.name.value"/>
+                                </div>
+                                <field name="priority" widget="priority"/>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <div>
+                                    <span>Customer: </span>
+                                    <t t-esc="record.partner_id.value"/>
+                                </div>
+                                <div>
+                                    <span>Car: </span>
+                                    <t t-esc="record.car_id.value"/>
+                                </div>
+                                <div>
+                                    <span>Mechanic: </span>
+                                    <t t-esc="record.employee_id.value"/>
+                                </div>
+                                <div t-if="record.deadline.value">
+                                    <span>Deadline: </span>
+                                    <t t-esc="record.deadline.value"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
         </field>
     </record>
 
@@ -117,10 +186,13 @@
                 <filter string="In Progress" name="filter_in_progress" domain="[('state', '=', 'in_progress')]"/>
                 <filter string="Done" name="filter_done" domain="[('state', '=', 'done')]"/>
                 <filter string="Cancelled" name="filter_cancelled" domain="[('state', '=', 'cancelled')]"/>
+                <filter string="Urgent" name="filter_urgent" domain="[('priority', '=', '3')]"/>
+                <filter string="High Priority" name="filter_high_priority" domain="[('priority', 'in', ['2', '3'])]"/>
                 <group expand="0" string="Group By">
                     <filter string="Mechanic" name="group_employee" context="{'group_by': 'employee_id'}"/>
                     <filter string="Reception" name="group_reception" context="{'group_by': 'reception_id'}"/>
                     <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Priority" name="group_priority" context="{'group_by': 'priority'}"/>
                 </group>
             </search>
         </field>

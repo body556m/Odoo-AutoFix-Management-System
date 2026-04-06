@@ -15,14 +15,27 @@
                     <group>
                         <group name="left_details">
                             <field name="partner_id"/>
-                            <field name="brand"/>
-                            <field name="model"/>
+                            <field name="brand_id"/>
+                            <field name="model_id"/>
                             <field name="year"/>
+                            <field name="fuel_type"/>
+                            <field name="transmission"/>
                         </group>
                         <group name="right_details">
                             <field name="vin"/>
                             <field name="mileage"/>
                             <field name="color"/>
+                            <field name="engine_number"/>
+                            <field name="engine_size"/>
+                        </group>
+                    </group>
+                    <group string="Insurance Information">
+                        <group>
+                            <field name="insurance_company"/>
+                            <field name="insurance_expiry"/>
+                        </group>
+                        <group>
+                            <field name="car_image" widget="image" class="oe_avatar"/>
                         </group>
                     </group>
                     <notebook>
@@ -56,11 +69,13 @@
         <field name="arch" type="xml">
             <tree string="Cars">
                 <field name="name"/>
-                <field name="brand"/>
-                <field name="model"/>
+                <field name="brand_id"/>
+                <field name="model_id"/>
                 <field name="year"/>
                 <field name="partner_id"/>
                 <field name="mileage"/>
+                <field name="fuel_type"/>
+                <field name="service_count" string="# Services"/>
             </tree>
         </field>
     </record>
@@ -71,12 +86,11 @@
         <field name="model">autofix.car</field>
         <field name="arch" type="xml">
             <search string="Search Cars">
-                <field name="name" string="Plate / Brand / Model" filter_domain="['|', '|', ('name', 'ilike', self), ('brand', 'ilike', self), ('model', 'ilike', self)]"/>
-                <field name="brand"/>
-                <field name="model"/>
+                <field name="name" string="Plate Number"/>
                 <field name="partner_id"/>
                 <group expand="0" string="Group By">
-                    <filter string="Brand" name="group_brand" context="{'group_by': 'brand'}"/>
+                    <filter string="Brand" name="group_brand" context="{'group_by': 'brand_id'}"/>
+                    <filter string="Model" name="group_model" context="{'group_by': 'model_id'}"/>
                     <filter string="Owner" name="group_partner" context="{'group_by': 'partner_id'}"/>
                     <filter string="Year" name="group_year" context="{'group_by': 'year'}"/>
                 </group>

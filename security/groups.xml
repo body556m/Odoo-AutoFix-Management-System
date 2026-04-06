@@ -12,12 +12,12 @@
         <record id="group_autofix_manager" model="res.groups">
             <field name="name">AutoFix / Manager</field>
             <field name="category_id" ref="module_category_autofix"/>
-            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+            <field name="implied_ids" eval="[(4, ref('group_autofix_receptionist')), (4, ref('group_autofix_mechanic')), (4, ref('group_autofix_accountant'))]"/>
         </record>
 
-        <!-- Mechanic Group -->
-        <record id="group_autofix_mechanic" model="res.groups">
-            <field name="name">AutoFix / Mechanic</field>
+        <!-- Accountant Group -->
+        <record id="group_autofix_accountant" model="res.groups">
+            <field name="name">AutoFix / Accountant</field>
             <field name="category_id" ref="module_category_autofix"/>
             <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         </record>
@@ -25,6 +25,13 @@
         <!-- Receptionist Group -->
         <record id="group_autofix_receptionist" model="res.groups">
             <field name="name">AutoFix / Receptionist</field>
+            <field name="category_id" ref="module_category_autofix"/>
+            <field name="implied_ids" eval="[(4, ref('group_autofix_mechanic'))]"/>
+        </record>
+
+        <!-- Mechanic Group -->
+        <record id="group_autofix_mechanic" model="res.groups">
+            <field name="name">AutoFix / Mechanic</field>
             <field name="category_id" ref="module_category_autofix"/>
             <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         </record>

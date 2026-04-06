@@ -25,6 +25,23 @@ class AutoFixServiceReception(models.Model):
     work_order_ids = fields.One2many('autofix.work.order', 'reception_id', string='Work Orders')
     notes = fields.Text(string='Notes')
 
+    # Service Type and Priority
+    service_type_id = fields.Many2one('autofix.service.type', string='Service Type')
+    priority = fields.Selection([
+        ('0', 'Normal'),
+        ('1', 'Low'),
+        ('2', 'High'),
+        ('3', 'Urgent'),
+    ], string='Priority', default='0')
+    estimated_cost = fields.Float(string='Estimated Cost')
+
+    # Inspections
+    inspection_ids = fields.One2many('autofix.vehicle.inspection', 'reception_id', string='Inspections')
+    inspection_count = fields.Integer(compute='_compute_inspection_count')
+
+    # Feedback
+    feedback_id = fields.Many2one('autofix.customer.feedback', string='Customer Feedback')
+
     # Invoice fields
     invoice_ids = fields.Many2many('account.move', string='Invoices', copy=False)
     invoice_count = fields.Integer(string='Invoice Count', compute='_compute_invoice_count')
@@ -45,6 +62,38 @@ class AutoFixServiceReception(models.Model):
     def _compute_invoice_count(self):
         for rec in self:
             rec.invoice_count = len(rec.invoice_ids)
+
+    @api.depends('inspection_ids')
+    def _compute_inspection_count(self):
+        for rec in self:
+            rec.inspection_count = len(rec.inspection_ids)
+
+    @api.onchange('service_type_id')
+    def _onchange_service_type(self):
+        if self.service_type_id:
+            self.estimated_cost = self.service_type_id.default_labor_cost
+
+    def action_view_inspections(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Vehicle Inspections',
+            'res_model': 'autofix.vehicle.inspection',
+            'view_mode': 'tree,form',
+            'domain': [('reception_id', '=', self.id)],
+            'target': 'current',
+        }
+
+    def action_request_feedback(self):
+        """Send email template to request customer feedback after service is done."""
+        self.ensure_one()
+        if self.state != 'done':
+            raise UserError('Feedback can only be requested for completed receptions.')
+        if self.partner_id.email:
+            template = self.env.ref('autofix.email_template_customer_feedback', raise_if_not_found=False)
+            if template:
+                template.send_mail(self.id, force_send=True)
+        return True
 
     @api.model_create_multi
     def create(self, vals_list):

@@ -12,5 +12,29 @@
             <field name="perm_create" eval="True"/>
             <field name="perm_unlink" eval="True"/>
         </record>
+
+        <!-- Mechanic: Only see inspections they performed -->
+        <record id="rule_mechanic_own_inspections" model="ir.rule">
+            <field name="name">Mechanic: Own Inspections Only</field>
+            <field name="model_id" ref="model_autofix_vehicle_inspection"/>
+            <field name="groups" eval="[(4, ref('group_autofix_mechanic'))]"/>
+            <field name="domain_force">[('inspector_id.user_id', '=', user.id)]</field>
+        </record>
+
+        <!-- Receptionist: Read-only on petty cash -->
+        <record id="rule_receptionist_petty_cash_readonly" model="ir.rule">
+            <field name="name">Receptionist: Petty Cash Read-Only</field>
+            <field name="model_id" ref="model_autofix_petty_cash"/>
+            <field name="groups" eval="[(4, ref('group_autofix_receptionist'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <!-- Accountant: Read-only on receptions -->
+        <record id="rule_accountant_reception_readonly" model="ir.rule">
+            <field name="name">Accountant: Receptions Read-Only</field>
+            <field name="model_id" ref="model_autofix_service_reception"/>
+            <field name="groups" eval="[(4, ref('group_autofix_accountant'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
     </data>
 </odoo>

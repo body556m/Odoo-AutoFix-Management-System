@@ -27,6 +27,38 @@
             </field>
         </record>
 
+        <!-- Car Brand Action -->
+        <record id="action_autofix_car_brand" model="ir.actions.act_window">
+            <field name="name">Car Brands</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.car.brand</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Car Model Action -->
+        <record id="action_autofix_car_model" model="ir.actions.act_window">
+            <field name="name">Car Models</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.car.model</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Service Type Action -->
+        <record id="action_autofix_service_type" model="ir.actions.act_window">
+            <field name="name">Service Types</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.service.type</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Inspection Template Action -->
+        <record id="action_autofix_inspection_template" model="ir.actions.act_window">
+            <field name="name">Inspection Templates</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.inspection.template</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
         <!-- Menu for cars -->
         <menuitem id="autofix_car_menu"
                   name="Cars"
@@ -142,5 +174,91 @@
                   action="action_autofix_payroll_wizard"
                   groups="group_autofix_manager"
                   sequence="62"/>
+
+        <!-- Appointments -->
+        <record id="action_autofix_appointment" model="ir.actions.act_window">
+            <field name="name">Appointments</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.appointment</field>
+            <field name="view_mode">tree,calendar,form</field>
+        </record>
+
+        <menuitem id="autofix_appointment_menu"
+                  name="Appointments"
+                  parent="autofix_menu_root"
+                  action="action_autofix_appointment"
+                  sequence="15"/>
+
+        <!-- Vehicle Inspections -->
+        <record id="action_autofix_vehicle_inspection" model="ir.actions.act_window">
+            <field name="name">Vehicle Inspections</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.vehicle.inspection</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="autofix_vehicle_inspection_menu"
+                  name="Vehicle Inspections"
+                  parent="autofix_menu_root"
+                  action="action_autofix_vehicle_inspection"
+                  sequence="25"/>
+
+        <!-- Warranties -->
+        <record id="action_autofix_warranty" model="ir.actions.act_window">
+            <field name="name">Warranties</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.warranty</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="autofix_warranty_menu"
+                  name="Warranties"
+                  parent="autofix_menu_root"
+                  action="action_autofix_warranty"
+                  sequence="35"/>
+
+        <!-- Customer Feedback -->
+        <record id="action_autofix_customer_feedback" model="ir.actions.act_window">
+            <field name="name">Customer Feedback</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.customer.feedback</field>
+            <field name="view_mode">tree,graph,form</field>
+        </record>
+
+        <menuitem id="autofix_customer_feedback_menu"
+                  name="Customer Feedback"
+                  parent="autofix_menu_root"
+                  action="action_autofix_customer_feedback"
+                  sequence="45"/>
+
+        <!-- Configuration -->
+        <menuitem id="autofix_config_menu"
+                  name="Configuration"
+                  parent="autofix_menu_root"
+                  sequence="90"/>
+
+        <menuitem id="autofix_config_car_brands_menu"
+                  name="Car Brands"
+                  parent="autofix_config_menu"
+                  action="action_autofix_car_brand"
+                  sequence="91"/>
+
+        <menuitem id="autofix_config_car_models_menu"
+                  name="Car Models"
+                  parent="autofix_config_menu"
+                  action="action_autofix_car_model"
+                  sequence="92"/>
+
+        <menuitem id="autofix_config_service_types_menu"
+                  name="Service Types"
+                  parent="autofix_config_menu"
+                  action="action_autofix_service_type"
+                  sequence="93"/>
+
+        <menuitem id="autofix_config_inspection_templates_menu"
+                  name="Inspection Templates"
+                  parent="autofix_config_menu"
+                  action="action_autofix_inspection_template"
+                  sequence="94"/>
     </data>
 </odoo>

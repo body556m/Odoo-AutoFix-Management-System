@@ -56,6 +56,36 @@ class AutoFixWorkOrder(models.Model):
     total_cost = fields.Float(string='Total Cost', compute='_compute_total_cost', store=True)
     stock_move_ids = fields.Many2many('stock.move', string='Stock Moves', copy=False)
 
+    priority = fields.Selection([
+        ('0', 'Normal'),
+        ('1', 'Low'),
+        ('2', 'High'),
+        ('3', 'Urgent'),
+    ], string='Priority', default='0')
+    deadline = fields.Datetime(string='Deadline')
+    date_start = fields.Datetime(string='Start Time')
+    date_end = fields.Datetime(string='End Time')
+    duration = fields.Float(string='Duration (Hours)', compute='_compute_duration', store=True)
+    service_type_id = fields.Many2one('autofix.service.type', string='Service Type')
+    quality_check = fields.Boolean(string='Quality Check Done')
+    quality_notes = fields.Text(string='Quality Notes')
+    warranty_id = fields.Many2one('autofix.warranty', string='Warranty')
+    is_warranty_repair = fields.Boolean(string='Warranty Repair')
+
+    @api.depends('date_start', 'date_end')
+    def _compute_duration(self):
+        for rec in self:
+            if rec.date_start and rec.date_end:
+                delta = rec.date_end - rec.date_start
+                rec.duration = delta.total_seconds() / 3600
+            else:
+                rec.duration = 0.0
+
+    @api.onchange('is_warranty_repair')
+    def _onchange_is_warranty_repair(self):
+        if self.is_warranty_repair:
+            self.labor_cost = 0.0
+
     @api.depends('expense_ids.amount')
     def _compute_total_expenses(self):
         for rec in self:
@@ -81,9 +111,11 @@ class AutoFixWorkOrder(models.Model):
     def action_start(self):
         for rec in self:
             rec.state = 'in_progress'
+            rec.date_start = fields.Datetime.now()
 
     def action_done(self):
         for rec in self:
+            rec.date_end = fields.Datetime.now()
             if not rec.part_ids:
                 rec.state = 'done'
                 continue

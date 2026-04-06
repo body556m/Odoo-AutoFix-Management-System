@@ -1,54 +1,139 @@
-# AutoFix - Odoo 17 Auto Repair Management Module
+# AutoFix - Car Workshop Management System
 
-## Overview
-AutoFix is a comprehensive, custom-built Odoo 17 module designed specifically for Auto Repair Shops and Garages. It streamlines daily operations by managing cars, service receptions, work orders, inventory, expenses, and employee payroll within a unified system. It is heavily integrated with Odoo's standard applications such as Contacts, Mail, HR, Accounting, Stock, and Purchase.
+A comprehensive Odoo 17 module for managing car workshop operations, including vehicle registration, service reception, work orders, appointments, inspections, and warranty tracking.
 
 ## Features
 
-### 1. Core Operations
-*   **Car Management:** Register and track vehicles with details like brand, model, year, VIN/Chassis, and initial mileage.
-*   **Service Receptions:** Manage customer visits from entry to exit. Tracks car status, customer complaints, and generates automated sequences.
-*   **Work Orders:** Assign specific repair jobs to mechanics (HR Employees). Track state (Pending, In Progress, Done, Cancelled), labor costs, used spare parts, and external expenses.
-*   **Petty Cash Management:** Simple tracking for daily shop expenses and small outlays by managers.
+### Vehicle Management
+- **Car Registration**: Register vehicles with brand, model, year, VIN, mileage, fuel type, transmission, insurance information
+- **Car Brands & Models**: Master data for car brands and models
+- **Service History**: Track all service receptions per vehicle
 
-### 2. ERP Integration
-*   **Accounting (Invoicing):** Seamlessly converts Service Receptions into `account.move` invoices containing labor, parts, and additional expenses. Includes automated warning and cancellation functions for unpaid invoices.
-*   **Inventory (Stock):** Tracks consumed spare parts in work orders, creating direct stock moves. Integrates with the purchase module for automatic reordering when stock drops below minimum quantities.
-*   **Human Resources (Payroll):** Calculates mechanics' monthly wages based on base salary and performance bonuses per completed work order.
-*   **Mail & Communications:** Automatically sends a daily summary email to managers including work order statistics, financial summaries, mechanics' performance, and stock alerts.
+### Service Reception
+- **Service Orders**: Create and manage service receptions with customer complaints
+- **Service Types**: Predefined service categories (Mechanical, Electrical, Body Work, Paint, A/C, Tires, General)
+- **Priority Levels**: Normal, Low, High, Urgent
+- **Workflow**: Draft → In Progress → Done → Cancelled
 
-### 3. Advanced Features
-*   **Management Dashboard (OWL):** A dynamic, reactive dashboard built with Odoo's OWL framework. It displays key performance indicators (KPIs), open work orders, mechanic performance, and immediate financial summaries.
-*   **Automated Actions (Cron Jobs):**
-    *   Daily Manager Summary Report.
-    *   15-day reminder for unpaid invoices.
-    *   30-day automatic cancellation of overdue unpaid invoices.
-*   **Reporting (QWeb PDF):**
-    *   Comprehensive Maintenance Invoices.
-    *   Inventory Audit Reports.
-    *   Mechanics Payroll Reports.
-*   **Auditing Tools:** Dedicated wizard for Monthly/Annual inventory checks, resulting in a printable financial and stock summary.
+### Work Orders
+- **Work Order Management**: Assign mechanics to specific tasks
+- **Parts Tracking**: Track parts used with stock integration
+- **Expense Tracking**: Track additional expenses per work order
+- **Quality Control**: Quality check fields for mechanic confirmation
+- **Time Tracking**: Start/end time tracking, duration calculation
 
-## Architecture & Data Models
-The application relies on several interconnected models:
-*   `autofix.car`: Central record for vehicles.
-*   `autofix.service.reception`: Parent record for a service visit. Relates `1:M` with work orders.
-*   `autofix.work.order`: Granular repair tasks related to the reception.
-*   `autofix.work.order.part`: Lines for parts consumed (`M:1` to work order).
-*   `autofix.work.order.expense`: Lines for external expenses (`M:1` to work order).
-*   `autofix.petty.cash`: Independent records for shop expenses.
-*   `autofix.inventory.audit` & `autofix.inventory.audit.line`: Wizards and lines for stock checking.
-*   `autofix.payroll` & `autofix.payroll.line`: Wizards for generating mechanic salaries.
+### Appointments
+- **Customer Appointments**: Schedule customer visits with date/time slots
+- **Calendar View**: Visual calendar for appointment management
+- **Auto-Reception**: Create service reception from appointment arrival
 
-## Technologies Used
-*   **Framework:** Odoo 17 ORM
-*   **Backend:** Python 3
-*   **Frontend (Views & Reports):** XML, QWeb templating
-*   **Frontend (Dashboard):** OWL (Odoo Web Library) / JavaScript / CSS
-*   **Database:** PostgreSQL
+### Vehicle Inspections
+- **Inspection Templates**: Create reusable checklist templates
+- **Inspection Reports**: Record detailed inspection results with conditions
+- **Categories**: Engine, Brakes, Suspension, Electrical, Body, Tires, Fluids, Interior, Exterior
 
-## Access Rights & Security
-AutoFix provides role-based access control with three main groups:
-*   **AutoFix / Manager:** Full access to all features, settings, financial data, payroll, and the management dashboard.
-*   **AutoFix / Receptionist:** Access to create and manage cars, service receptions, and create basic work orders.
-*   **AutoFix / Mechanic:** Limited access to view assigned work orders and update their statuses to complete the jobs.
+### Warranty Tracking
+- **Warranty Records**: Track warranty for parts/labor/full
+- **Warranty Claims**: Manage warranty claims with approval workflow
+- **Auto-Expiry**: Cron job to automatically mark expired warranties
+
+### Customer Feedback
+- **Ratings**: 1-5 star rating system
+- **Service Quality**: Track service quality, cleanliness, timeliness
+- **Recommendations**: Track if customer would recommend
+
+### Financial
+- **Petty Cash**: Expense tracking with approval workflow
+- **Payroll**: Employee wage management and payroll runs
+- **Invoicing**: Generate invoices from service receptions
+- **Inventory Audit**: Stock inventory verification
+
+## Module Dependencies
+
+- `base`
+- `mail`
+- `hr`
+- `account`
+- `stock`
+- `purchase`
+
+## Security Groups
+
+| Group | Description |
+|-------|-------------|
+| AutoFix / Manager | Full access to all features |
+| AutoFix / Accountant | Access to petty cash and payroll |
+| AutoFix / Receptionist | Manage receptions, appointments |
+| AutoFix / Mechanic | Manage own work orders |
+
+## API Endpoints
+
+The module provides REST API endpoints for external integrations:
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/autofix/receptions` | GET | List service receptions |
+| `/api/autofix/receptions/<id>` | GET | Get single reception |
+| `/api/autofix/work-orders` | GET | List work orders |
+| `/api/autofix/cars` | GET | List registered cars |
+| `/api/autofix/dashboard` | GET | Get dashboard KPIs |
+
+## Module Structure
+
+```
+autofix/
+├── __init__.py
+├── __manifest__.py
+├── controllers/
+│   ├── __init__.py
+│   └── main.py           # REST API controllers
+├── data/
+│   ├── sequence.xml      # Sequences
+│   ├── cron.xml          # Scheduled actions
+│   ├── record_rules.xml  # Access rules
+│   └── ...
+├── models/
+│   ├── __init__.py
+│   ├── car.py            # Vehicle model
+│   ├── car_brand.py      # Brand/model master data
+│   ├── service_type.py   # Service categories
+│   ├── service_reception.py
+│   ├── work_order.py
+│   ├── petty_cash.py
+│   ├── vehicle_inspection.py
+│   ├── warranty.py
+│   ├── appointment.py
+│   ├── customer_feedback.py
+│   └── ...
+├── report/
+│   └── ...
+├── security/
+│   ├── groups.xml        # Security groups
+│   └── ir.model.access.csv
+├── views/
+│   ├── menus.xml
+│   ├── car_views.xml
+│   └── ...
+├── wizard/
+│   └── ...
+└── static/
+    ├── src/
+    │   ├── css/dashboard.css
+    │   ├── js/dashboard.js
+    │   └── xml/dashboard.xml
+    └── description/
+        └── icon.png
+```
+
+## Version History
+
+- **17.0.0.2.0**: Added vehicle inspections, warranties, appointments, customer feedback, REST API, enhanced security
+- **17.0.0.1.0**: Initial release with core features
+
+## License
+
+Proprietary - All rights reserved
+
+## Author
+
+Abdo Mohamed
