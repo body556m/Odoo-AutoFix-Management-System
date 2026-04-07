@@ -5,6 +5,8 @@
     'version': '17.0.0.2.0',
     'depends': ['base', 'mail', 'hr', 'account', 'stock', 'purchase'],
     'data': [
+        'security/groups.xml',
+        'security/ir.model.access.csv',
         'data/sequence.xml',
         'data/server_actions.xml',
         'data/cron.xml',
@@ -14,8 +16,6 @@
         'report/maintenance_invoice_report.xml',
         'report/inventory_audit_report.xml',
         'report/payroll_report.xml',
-        'security/groups.xml',
-        'security/ir.model.access.csv',
         'views/car_views.xml',
         'views/car_brand_views.xml',
         'views/service_type_views.xml',

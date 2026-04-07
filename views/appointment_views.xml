@@ -50,7 +50,7 @@
                 <field name="appointment_date"/>
                 <field name="time_slot"/>
                 <field name="service_type_id"/>
-                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'confirmed'" decoration-warning="state == 'arrived'" decoration-danger="state == 'cancelled'" decoration-secondary="state == 'no_show'"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'confirmed'" decoration-warning="state == 'arrived'" decoration-danger="state == 'cancelled'" decoration-muted="state == 'no_show'"/>
             </tree>
         </field>
     </record>

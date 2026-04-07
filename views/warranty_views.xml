@@ -71,7 +71,7 @@
                 <field name="car_id"/>
                 <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
                 <filter string="Expired" name="expired" domain="[('state', '=', 'expired')]"/>
-                <filter string="Expiring Soon" name="expiring_soon" domain="[('state', '=', 'active'), ('end_date', '&lt;=', context_today() + timedelta(days=30))]"/>
+                <filter string="Expiring Soon" name="expiring_soon" domain="[('state', '=', 'active'), ('end_date', '&lt;=', (context_today() + datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]"/>
             </search>
         </field>
     </record>

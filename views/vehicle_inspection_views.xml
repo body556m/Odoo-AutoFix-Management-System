@@ -72,7 +72,7 @@
                                     <field name="sequence"/>
                                     <field name="name"/>
                                     <field name="category"/>
-                                    <field name="condition" widget="badge" decoration-success="condition == 'good'" decoration-warning="condition == 'fair'" decoration-danger="condition == 'poor'" decoration-danger="condition == 'critical'"/>
+                                    <field name="condition" widget="badge" decoration-success="condition == 'good'" decoration-warning="condition == 'fair'" decoration-danger="condition in ('poor', 'critical')"/>
                                     <field name="notes"/>
                                 </tree>
                             </field>
@@ -93,7 +93,7 @@
                 <field name="reception_id"/>
                 <field name="inspector_id"/>
                 <field name="date"/>
-                <field name="overall_condition" widget="badge" decoration-success="overall_condition == 'good'" decoration-warning="overall_condition == 'fair'" decoration-danger="overall_condition == 'poor'" decoration-danger="overall_condition == 'critical'"/>
+                <field name="overall_condition" widget="badge" decoration-success="overall_condition == 'good'" decoration-warning="overall_condition == 'fair'" decoration-danger="overall_condition in ('poor', 'critical')"/>
                 <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'done'"/>
             </tree>
         </field>
