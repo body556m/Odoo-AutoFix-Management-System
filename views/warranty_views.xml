@@ -83,8 +83,8 @@
         <field name="arch" type="xml">
             <form string="Warranty Claim">
                 <header>
-                    <button name="action_approve" string="Approve" type="object" class="btn-success" attrs="{'invisible': [('state', '!=', 'pending')]}"/>
-                    <button name="action_reject" string="Reject" type="object" class="btn-danger" attrs="{'invisible': [('state', '!=', 'pending')]}"/>
+                    <button name="action_approve" string="Approve" type="object" class="btn-success" invisible="state != 'pending'"/>
+                    <button name="action_reject" string="Reject" type="object" class="btn-danger" invisible="state != 'pending'"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>

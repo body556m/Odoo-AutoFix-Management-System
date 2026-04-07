@@ -280,7 +280,7 @@ class AutoFixServiceReception(models.Model):
         stock_moves = StockMove.search([
             ('create_date', '>=', first_day_of_month),
             ('create_date', '<=', today),
-            ('name', 'ilike', 'AutoFix WO:'),
+            ('origin', 'ilike', 'WO/'),
         ])
         total_stock_moves = len(stock_moves)
         total_parts_quantity = sum(stock_moves.mapped('product_uom_qty'))

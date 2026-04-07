@@ -21,6 +21,7 @@ class HrEmployeeAutoFix(models.Model):
         ('expert', 'Expert'),
     ], string='Skill Level')
     is_mechanic = fields.Boolean(string='Is Mechanic', default=False)
+    work_order_ids = fields.One2many('autofix.work.order', 'employee_id', string='Work Orders')
     work_order_count = fields.Integer(compute='_compute_work_order_count', store=True)
     active_work_order_ids = fields.One2many('autofix.work.order', 'employee_id', string='Active Work Orders', domain=[('state', 'in', ['pending', 'in_progress'])])
 

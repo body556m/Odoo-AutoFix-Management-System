@@ -45,8 +45,8 @@
             <form string="Vehicle Inspection">
                 <header>
                     <button name="action_generate_from_template" string="Generate from Template" type="object" class="btn-primary"/>
-                    <button name="action_done" string="Complete" type="object" class="btn-success" attrs="{'invisible': [('state', '=', 'done')]}"/>
-                    <button name="action_reset" string="Reset to Draft" type="object" attrs="{'invisible': [('state', '=', 'draft')]}"/>
+                    <button name="action_done" string="Complete" type="object" class="btn-success" invisible="state == 'done'"/>
+                    <button name="action_reset" string="Reset to Draft" type="object" invisible="state == 'draft'"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
                 </header>
                 <sheet>

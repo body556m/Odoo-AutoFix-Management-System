@@ -2,7 +2,7 @@ from odoo import http
 
 class AutoFixAPI(http.Controller):
     
-    @http.route('/api/autofix/receptions', type='json', auth='public', methods=['GET'])
+    @http.route('/api/autofix/receptions', type='json', auth='user', methods=['GET'])
     def get_receptions(self, state=None, date_from=None, date_to=None, **kwargs):
         domain = []
         if state:
@@ -23,7 +23,7 @@ class AutoFixAPI(http.Controller):
             'total_cost': r.total_cost,
         } for r in receptions]
 
-    @http.route('/api/autofix/receptions/<int:reception_id>', type='json', auth='public', methods=['GET'])
+    @http.route('/api/autofix/receptions/<int:reception_id>', type='json', auth='user', methods=['GET'])
     def get_reception(self, reception_id, **kwargs):
         reception = http.request.env['autofix.service.reception'].browse(reception_id)
         if not reception.exists():
@@ -49,7 +49,7 @@ class AutoFixAPI(http.Controller):
             'work_orders': work_orders,
         }
 
-    @http.route('/api/autofix/work-orders', type='json', auth='public', methods=['GET'])
+    @http.route('/api/autofix/work-orders', type='json', auth='user', methods=['GET'])
     def get_work_orders(self, state=None, **kwargs):
         domain = []
         if state:
@@ -65,7 +65,7 @@ class AutoFixAPI(http.Controller):
             'total_cost': wo.total_cost,
         } for wo in work_orders]
 
-    @http.route('/api/autofix/cars', type='json', auth='public', methods=['GET'])
+    @http.route('/api/autofix/cars', type='json', auth='user', methods=['GET'])
     def get_cars(self, **kwargs):
         cars = http.request.env['autofix.car'].search([], limit=100)
         return [{
@@ -77,7 +77,7 @@ class AutoFixAPI(http.Controller):
             'partner_id': c.partner_id.name,
         } for c in cars]
 
-    @http.route('/api/autofix/dashboard', type='json', auth='public', methods=['GET'])
+    @http.route('/api/autofix/dashboard', type='json', auth='user', methods=['GET'])
     def get_dashboard(self, **kwargs):
         data = http.request.env['autofix.service.reception'].get_dashboard_data()
         return data

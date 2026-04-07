@@ -7,10 +7,10 @@
         <field name="arch" type="xml">
             <form string="Appointment">
                 <header>
-                    <button name="action_confirm" string="Confirm" type="object" class="btn-primary" attrs="{'invisible': [('state', '!=', 'draft')]}"/>
-                    <button name="action_arrived" string="Create Reception" type="object" class="btn-success" attrs="{'invisible': [('state', 'not in', ['draft', 'confirmed'])]}"/>
-                    <button name="action_cancel" string="Cancel" type="object" attrs="{'invisible': [('state', 'in', ['cancelled', 'no_show'])]}"/>
-                    <button name="action_no_show" string="No Show" type="object" attrs="{'invisible': [('state', 'not in', ['draft', 'confirmed'])]}"/>
+                    <button name="action_confirm" string="Confirm" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_arrived" string="Create Reception" type="object" class="btn-success" invisible="state not in ('draft', 'confirmed')"/>
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state in ('cancelled', 'no_show')"/>
+                    <button name="action_no_show" string="No Show" type="object" invisible="state not in ('draft', 'confirmed')"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,arrived,cancelled,no_show"/>
                 </header>
                 <sheet>
@@ -30,7 +30,7 @@
                     <group string="Notes">
                         <field name="notes" nolabel="1"/>
                     </group>
-                    <group string="Created Reception" attrs="{'invisible': [('reception_id', '=', False)]}">
+                    <group string="Created Reception" invisible="not reception_id">
                         <field name="reception_id"/>
                     </group>
                 </sheet>

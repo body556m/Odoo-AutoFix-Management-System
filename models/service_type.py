@@ -19,6 +19,7 @@ class ServiceType(models.Model):
     estimated_duration = fields.Float(string='Estimated Duration (Hours)')
     description = fields.Text(string='Description')
     active = fields.Boolean(string='Active', default=True)
+    reception_ids = fields.One2many('autofix.service.reception', 'service_type_id', string='Receptions')
     reception_count = fields.Integer(compute='_compute_reception_count')
 
     @api.depends('reception_ids')

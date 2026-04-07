@@ -35,7 +35,7 @@
                                 <h5><strong>Vehicle Information</strong></h5>
                                 <p class="mb-1">
                                     <strong>Brand / Model:</strong>
-                                    <span t-field="doc.car_id.brand"/> / <span t-field="doc.car_id.model"/>
+                                    <span t-field="doc.car_id.brand_id.name"/> / <span t-field="doc.car_id.model_id.name"/>
                                 </p>
                                 <p class="mb-1">
                                     <strong>Plate Number:</strong> <span t-field="doc.car_id.name"/>
