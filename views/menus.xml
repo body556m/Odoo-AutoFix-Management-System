@@ -153,6 +153,27 @@
                   action="action_autofix_inventory_audit_wizard"
                   sequence="51"/>
 
+        <!-- Action for Stock Integration -->
+        <record id="action_autofix_stock_integration" model="ir.actions.act_window">
+            <field name="name">Stock Integration</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.move</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('origin', 'ilike', 'WO/')]</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                No stock moves for Work Orders found!
+              </p>
+            </field>
+        </record>
+
+        <!-- Menu for Stock Integration -->
+        <menuitem id="autofix_stock_integration_menu"
+                  name="Stock Integration"
+                  parent="autofix_menu_root"
+                  action="action_autofix_stock_integration"
+                  sequence="55"/>
+
         <!-- ── HR parent menu ── -->
         <menuitem id="autofix_hr_menu"
                   name="HR"

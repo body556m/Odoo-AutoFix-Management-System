@@ -220,7 +220,7 @@ class AutoFixServiceReception(models.Model):
         # --- Revenue: paid customer invoices this month ---
         paid_invoices = Invoice.search([
             ('move_type', '=', 'out_invoice'),
-            ('payment_state', '=', 'paid'),
+            ('payment_state', 'in', ('paid', 'in_payment')),
             ('invoice_date', '>=', first_day_of_month),
             ('invoice_date', '<=', today),
         ])
@@ -278,8 +278,6 @@ class AutoFixServiceReception(models.Model):
         # --- Stock Integration: Stock Moves this month ---
         StockMove = self.env['stock.move']
         stock_moves = StockMove.search([
-            ('create_date', '>=', first_day_of_month),
-            ('create_date', '<=', today),
             ('origin', 'ilike', 'WO/'),
         ])
         total_stock_moves = len(stock_moves)
@@ -332,7 +330,7 @@ class AutoFixServiceReception(models.Model):
         for reception in receptions:
             # Check if all linked invoices are unpaid
             unpaid_invoices = reception.invoice_ids.filtered(
-                lambda inv: inv.payment_state != 'paid'
+                lambda inv: inv.payment_state not in ('paid', 'in_payment')
             )
             if not unpaid_invoices:
                 continue
@@ -396,7 +394,7 @@ class AutoFixServiceReception(models.Model):
         for reception in receptions:
             # Check if all linked invoices are unpaid
             unpaid_invoices = reception.invoice_ids.filtered(
-                lambda inv: inv.payment_state != 'paid'
+                lambda inv: inv.payment_state not in ('paid', 'in_payment')
             )
             if not unpaid_invoices:
                 continue

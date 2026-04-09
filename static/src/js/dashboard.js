@@ -107,7 +107,7 @@ class AutoFixDashboard extends Component {
             views: [[false, "list"], [false, "form"]],
             domain: [
                 ["move_type", "=", "out_invoice"],
-                ["payment_state", "=", "paid"],
+                ["payment_state", "in", ["paid", "in_payment"]],
                 ["invoice_date", ">=", firstDay],
                 ["invoice_date", "<=", todayStr],
             ],
@@ -160,14 +160,12 @@ class AutoFixDashboard extends Component {
         const todayStr = today.toISOString().split("T")[0];
         this.action.doAction({
             type: "ir.actions.act_window",
-            name: "Stock Integration (This Month)",
+            name: "Stock Integration",
             res_model: "stock.move",
             view_mode: "list,form",
             views: [[false, "list"], [false, "form"]],
             domain: [
-                ["create_date", ">=", firstDay],
-                ["create_date", "<=", todayStr],
-                ["name", "ilike", "AutoFix WO:"],
+                ["origin", "ilike", "WO/"],
             ],
             target: "current",
         });

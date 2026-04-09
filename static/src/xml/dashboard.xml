@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <templates xml:space="preserve">
     <t t-name="autofix.AutoFixDashboard">
-        <div class="autofix-dashboard o_action">
+        <div class="o_action">
+            <div class="o_content autofix-dashboard">
             <!-- Header -->
             <div class="autofix-dashboard-header">
                 <h2>AutoFix — Management Dashboard</h2>
@@ -33,11 +34,6 @@
                     <div class="kpi-label">Completed This Month</div>
                 </div>
 
-                <div class="autofix-kpi-card kpi-money" t-on-click="openMonthRevenue">
-                    <div class="kpi-icon"><i class="fa fa-money"/></div>
-                    <div class="kpi-value"><t t-esc="formatCurrency(state.month_revenue)"/></div>
-                    <div class="kpi-label">Revenue This Month</div>
-                </div>
 
                 <div class="autofix-kpi-card kpi-money" t-on-click="openMonthPettyCash">
                     <div class="kpi-icon"><i class="fa fa-credit-card"/></div>
@@ -57,7 +53,7 @@
                         <t t-esc="state.stock_integration_count"/>
                         <span class="kpi-small">(<t t-esc="state.stock_integration_qty"/> items)</span>
                     </div>
-                    <div class="kpi-label">Stock Integration This Month</div>
+                    <div class="kpi-label">Stock Integration</div>
                 </div>
             </div>
 
@@ -120,6 +116,7 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
             </div>
         </div>
     </t>
