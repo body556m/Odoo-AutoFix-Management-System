@@ -7,12 +7,35 @@
             <field name="tag">autofix_dashboard</field>
         </record>
 
-        <!-- Top menu item — dashboard is the default action -->
+        <!-- Server Action for Root Menu to route based on security groups -->
+        <record id="action_autofix_root_dynamic" model="ir.actions.server">
+            <field name="name">AutoFix Root Action</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="state">code</field>
+            <field name="code"><![CDATA[
+if env.user.has_group('autofix.group_autofix_manager'):
+    action = env["ir.actions.actions"]._for_xml_id("autofix.action_autofix_dashboard")
+elif env.user.has_group('autofix.group_autofix_receptionist') or env.user.has_group('autofix.group_autofix_mechanic'):
+    action = env["ir.actions.actions"]._for_xml_id("autofix.action_autofix_car")
+else:
+    action = env["ir.actions.actions"]._for_xml_id("autofix.action_autofix_service_reception")
+            ]]></field>
+        </record>
+
+        <!-- Top menu item -->
         <menuitem id="autofix_menu_root"
                   web_icon="autofix,static/description/icon.png"
                   name="AutoFix"
-                  action="action_autofix_dashboard"
+                  action="action_autofix_root_dynamic"
                   sequence="10"/>
+
+        <!-- Dashboard menu (visible to Manager only) -->
+        <menuitem id="autofix_dashboard_menu"
+                  name="Dashboard"
+                  parent="autofix_menu_root"
+                  action="action_autofix_dashboard"
+                  groups="group_autofix_manager"
+                  sequence="1"/>
 
         <!-- Action for cars -->
         <record id="action_autofix_car" model="ir.actions.act_window">
@@ -59,12 +82,28 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <!-- Menu for cars -->
+        <!-- Menu for cars (Manager, Mechanic, Receptionist — NOT Accountant) -->
         <menuitem id="autofix_car_menu"
                   name="Cars"
                   parent="autofix_menu_root"
                   action="action_autofix_car"
+                  groups="group_autofix_manager,group_autofix_mechanic,group_autofix_receptionist"
                   sequence="10"/>
+
+        <!-- Appointments (Manager, Receptionist) -->
+        <record id="action_autofix_appointment" model="ir.actions.act_window">
+            <field name="name">Appointments</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.appointment</field>
+            <field name="view_mode">tree,calendar,form</field>
+        </record>
+
+        <menuitem id="autofix_appointment_menu"
+                  name="Appointments"
+                  parent="autofix_menu_root"
+                  action="action_autofix_appointment"
+                  groups="group_autofix_manager,group_autofix_receptionist"
+                  sequence="15"/>
 
         <!-- Action for service receptions -->
         <record id="action_autofix_service_reception" model="ir.actions.act_window">
@@ -79,12 +118,28 @@
             </field>
         </record>
 
-        <!-- Menu for service receptions -->
+        <!-- Menu for service receptions (all roles have read access) -->
         <menuitem id="autofix_reception_menu"
                   name="Service Receptions"
                   parent="autofix_menu_root"
                   action="action_autofix_service_reception"
+                  groups="group_autofix_manager,group_autofix_mechanic,group_autofix_receptionist,group_autofix_accountant"
                   sequence="20"/>
+
+        <!-- Vehicle Inspections (Manager, Mechanic, Receptionist) -->
+        <record id="action_autofix_vehicle_inspection" model="ir.actions.act_window">
+            <field name="name">Vehicle Inspections</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.vehicle.inspection</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="autofix_vehicle_inspection_menu"
+                  name="Vehicle Inspections"
+                  parent="autofix_menu_root"
+                  action="action_autofix_vehicle_inspection"
+                  groups="group_autofix_manager,group_autofix_mechanic,group_autofix_receptionist"
+                  sequence="25"/>
 
         <!-- Action for work orders -->
         <record id="action_autofix_work_order" model="ir.actions.act_window">
@@ -99,12 +154,28 @@
             </field>
         </record>
 
-        <!-- Menu for work orders -->
+        <!-- Menu for work orders (Manager, Mechanic, Receptionist) -->
         <menuitem id="autofix_work_order_menu"
                   name="Work Orders"
                   parent="autofix_menu_root"
                   action="action_autofix_work_order"
+                  groups="group_autofix_manager,group_autofix_mechanic,group_autofix_receptionist"
                   sequence="30"/>
+
+        <!-- Warranties (Manager only) -->
+        <record id="action_autofix_warranty" model="ir.actions.act_window">
+            <field name="name">Warranties</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.warranty</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="autofix_warranty_menu"
+                  name="Warranties"
+                  parent="autofix_menu_root"
+                  action="action_autofix_warranty"
+                  groups="group_autofix_manager"
+                  sequence="35"/>
 
         <!-- Action for petty cash -->
         <record id="action_autofix_petty_cash" model="ir.actions.act_window">
@@ -119,12 +190,28 @@
             </field>
         </record>
 
-        <!-- Menu for petty cash -->
+        <!-- Menu for petty cash (Manager, Receptionist, Accountant) -->
         <menuitem id="autofix_petty_cash_menu"
                   name="Petty Cash"
                   parent="autofix_menu_root"
                   action="action_autofix_petty_cash"
+                  groups="group_autofix_manager,group_autofix_receptionist,group_autofix_accountant"
                   sequence="40"/>
+
+        <!-- Customer Feedback (Manager, Receptionist) -->
+        <record id="action_autofix_customer_feedback" model="ir.actions.act_window">
+            <field name="name">Customer Feedback</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.customer.feedback</field>
+            <field name="view_mode">tree,graph,form</field>
+        </record>
+
+        <menuitem id="autofix_customer_feedback_menu"
+                  name="Customer Feedback"
+                  parent="autofix_menu_root"
+                  action="action_autofix_customer_feedback"
+                  groups="group_autofix_manager,group_autofix_receptionist"
+                  sequence="45"/>
 
         <!-- Action for inventory audit -->
         <record id="action_autofix_inventory_audit_menu" model="ir.actions.act_window">
@@ -139,18 +226,20 @@
             </field>
         </record>
 
-        <!-- Menu for inventory audit -->
+        <!-- Menu for inventory audit (Manager only) -->
         <menuitem id="autofix_inventory_audit_menu"
                   name="Inventory Audit"
                   parent="autofix_menu_root"
                   action="action_autofix_inventory_audit_menu"
+                  groups="group_autofix_manager"
                   sequence="50"/>
 
-        <!-- Menu for generate audit wizard -->
+        <!-- Menu for generate audit wizard (Manager only) -->
         <menuitem id="autofix_generate_audit_menu"
                   name="Generate Audit"
                   parent="autofix_menu_root"
                   action="action_autofix_inventory_audit_wizard"
+                  groups="group_autofix_manager"
                   sequence="51"/>
 
         <!-- Action for Stock Integration -->
@@ -167,17 +256,19 @@
             </field>
         </record>
 
-        <!-- Menu for Stock Integration -->
+        <!-- Menu for Stock Integration (Manager only) -->
         <menuitem id="autofix_stock_integration_menu"
                   name="Stock Integration"
                   parent="autofix_menu_root"
                   action="action_autofix_stock_integration"
+                  groups="group_autofix_manager"
                   sequence="55"/>
 
-        <!-- ── HR parent menu ── -->
+        <!-- ── HR parent menu (Manager, Accountant) ── -->
         <menuitem id="autofix_hr_menu"
                   name="HR"
                   parent="autofix_menu_root"
+                  groups="group_autofix_manager,group_autofix_accountant"
                   sequence="60"/>
 
         <!-- Payroll Runs -->
@@ -185,7 +276,7 @@
                   name="Payroll Runs"
                   parent="autofix_hr_menu"
                   action="action_autofix_payroll"
-                  groups="group_autofix_manager"
+                  groups="group_autofix_manager,group_autofix_accountant"
                   sequence="61"/>
 
         <!-- Generate Payroll -->
@@ -196,90 +287,39 @@
                   groups="group_autofix_manager"
                   sequence="62"/>
 
-        <!-- Appointments -->
-        <record id="action_autofix_appointment" model="ir.actions.act_window">
-            <field name="name">Appointments</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">autofix.appointment</field>
-            <field name="view_mode">tree,calendar,form</field>
-        </record>
-
-        <menuitem id="autofix_appointment_menu"
-                  name="Appointments"
-                  parent="autofix_menu_root"
-                  action="action_autofix_appointment"
-                  sequence="15"/>
-
-        <!-- Vehicle Inspections -->
-        <record id="action_autofix_vehicle_inspection" model="ir.actions.act_window">
-            <field name="name">Vehicle Inspections</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">autofix.vehicle.inspection</field>
-            <field name="view_mode">tree,form</field>
-        </record>
-
-        <menuitem id="autofix_vehicle_inspection_menu"
-                  name="Vehicle Inspections"
-                  parent="autofix_menu_root"
-                  action="action_autofix_vehicle_inspection"
-                  sequence="25"/>
-
-        <!-- Warranties -->
-        <record id="action_autofix_warranty" model="ir.actions.act_window">
-            <field name="name">Warranties</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">autofix.warranty</field>
-            <field name="view_mode">tree,form</field>
-        </record>
-
-        <menuitem id="autofix_warranty_menu"
-                  name="Warranties"
-                  parent="autofix_menu_root"
-                  action="action_autofix_warranty"
-                  sequence="35"/>
-
-        <!-- Customer Feedback -->
-        <record id="action_autofix_customer_feedback" model="ir.actions.act_window">
-            <field name="name">Customer Feedback</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">autofix.customer.feedback</field>
-            <field name="view_mode">tree,graph,form</field>
-        </record>
-
-        <menuitem id="autofix_customer_feedback_menu"
-                  name="Customer Feedback"
-                  parent="autofix_menu_root"
-                  action="action_autofix_customer_feedback"
-                  sequence="45"/>
-
-        <!-- Configuration -->
+        <!-- Configuration (Manager only) -->
         <menuitem id="autofix_config_menu"
                   name="Configuration"
                   parent="autofix_menu_root"
+                  groups="group_autofix_manager"
                   sequence="90"/>
 
         <menuitem id="autofix_config_car_brands_menu"
                   name="Car Brands"
                   parent="autofix_config_menu"
                   action="action_autofix_car_brand"
+                  groups="group_autofix_manager"
                   sequence="91"/>
 
         <menuitem id="autofix_config_car_models_menu"
                   name="Car Models"
                   parent="autofix_config_menu"
                   action="action_autofix_car_model"
+                  groups="group_autofix_manager"
                   sequence="92"/>
 
         <menuitem id="autofix_config_service_types_menu"
                   name="Service Types"
                   parent="autofix_config_menu"
                   action="action_autofix_service_type"
+                  groups="group_autofix_manager"
                   sequence="93"/>
 
         <menuitem id="autofix_config_inspection_templates_menu"
                   name="Inspection Templates"
                   parent="autofix_config_menu"
                   action="action_autofix_inspection_template"
+                  groups="group_autofix_manager"
                   sequence="94"/>
     </data>
 </odoo>
