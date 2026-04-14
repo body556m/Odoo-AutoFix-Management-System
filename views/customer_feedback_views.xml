@@ -60,7 +60,6 @@
         <field name="arch" type="xml">
             <graph string="Feedback Ratings">
                 <field name="rating" type="row"/>
-                <field name="rating" type="measure"/>
             </graph>
         </field>
     </record>
