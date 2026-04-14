@@ -28,7 +28,7 @@
                         </group>
                     </group>
                     <group string="Notes">
-                        <field name="notes" nolabel="1"/>
+                        <field name="notes" nolabel="1" colspan="2"/>
                     </group>
                     <group string="Created Reception" invisible="not reception_id">
                         <field name="reception_id"/>

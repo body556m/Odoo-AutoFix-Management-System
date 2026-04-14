@@ -29,7 +29,7 @@
                         </group>
                     </group>
                     <group string="Comments">
-                        <field name="comment" nolabel="1"/>
+                        <field name="comment" nolabel="1" colspan="2"/>
                     </group>
                 </sheet>
             </form>
