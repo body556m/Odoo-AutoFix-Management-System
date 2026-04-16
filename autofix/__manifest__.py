@@ -1,9 +1,12 @@
 {
     'name': "AutoFix",
+    'summary': "Vehicle Service & Repair Workshop Management",
     'author': "Abdo Mohamed",
     'category': "Services",
     'version': '17.0.0.2.0',
+    'license': 'LGPL-3',
     'depends': ['base', 'mail', 'hr', 'account', 'stock', 'purchase'],
+    'images': ['static/description/banner.png'],
     'data': [
         'security/groups.xml',
         'security/ir.model.access.csv',
