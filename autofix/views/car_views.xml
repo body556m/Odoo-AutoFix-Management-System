@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="view_autofix_car_form" model="ir.ui.view">
+        <field name="name">autofix.car.form</field>
+        <field name="model">autofix.car</field>
+        <field name="arch" type="xml">
+            <form string="Car">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Plate Number (e.g. 123 ABC)"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="left_details">
+                            <field name="partner_id"/>
+                            <field name="brand_id"/>
+                            <field name="model_id"/>
+                            <field name="year"/>
+                            <field name="fuel_type"/>
+                            <field name="transmission"/>
+                        </group>
+                        <group name="right_details">
+                            <field name="vin"/>
+                            <field name="mileage"/>
+                            <field name="color"/>
+                            <field name="engine_number"/>
+                            <field name="engine_size"/>
+                        </group>
+                    </group>
+                    <group string="Insurance Information">
+                        <group>
+                            <field name="insurance_company"/>
+                            <field name="insurance_expiry"/>
+                        </group>
+                        <group>
+                            <field name="car_image" widget="image" class="oe_avatar"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="General Notes..."/>
+                        </page>
+                        <page string="Service Receptions" name="receptions">
+                            <field name="reception_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="date_received"/>
+                                    <field name="mileage_on_arrival"/>
+                                    <field name="state" widget="badge"
+                                           decoration-info="state == 'draft'"
+                                           decoration-warning="state == 'in_progress'"
+                                           decoration-success="state == 'done'"
+                                           decoration-danger="state == 'cancelled'"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_autofix_car_tree" model="ir.ui.view">
+        <field name="name">autofix.car.tree</field>
+        <field name="model">autofix.car</field>
+        <field name="arch" type="xml">
+            <tree string="Cars">
+                <field name="name"/>
+                <field name="brand_id"/>
+                <field name="model_id"/>
+                <field name="year"/>
+                <field name="partner_id"/>
+                <field name="mileage"/>
+                <field name="fuel_type"/>
+                <field name="service_count" string="# Services"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="view_autofix_car_search" model="ir.ui.view">
+        <field name="name">autofix.car.search</field>
+        <field name="model">autofix.car</field>
+        <field name="arch" type="xml">
+            <search string="Search Cars">
+                <field name="name" string="Plate Number"/>
+                <field name="partner_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Brand" name="group_brand" context="{'group_by': 'brand_id'}"/>
+                    <filter string="Model" name="group_model" context="{'group_by': 'model_id'}"/>
+                    <filter string="Owner" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Year" name="group_year" context="{'group_by': 'year'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

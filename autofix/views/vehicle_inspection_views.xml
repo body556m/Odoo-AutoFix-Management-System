@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inspection Template Form View -->
+    <record id="view_inspection_template_form" model="ir.ui.view">
+        <field name="name">autofix.inspection.template.form</field>
+        <field name="model">autofix.inspection.template</field>
+        <field name="arch" type="xml">
+            <form string="Inspection Template">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="active"/>
+                    </group>
+                    <group string="Checklist Items">
+                        <field name="line_ids" nolabel="1" colspan="2">
+                            <tree editable="bottom">
+                                <field name="sequence"/>
+                                <field name="name"/>
+                                <field name="category"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Inspection Template Tree View -->
+    <record id="view_inspection_template_tree" model="ir.ui.view">
+        <field name="name">autofix.inspection.template.tree</field>
+        <field name="model">autofix.inspection.template</field>
+        <field name="arch" type="xml">
+            <tree string="Inspection Templates">
+                <field name="name"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vehicle Inspection Form View -->
+    <record id="view_vehicle_inspection_form" model="ir.ui.view">
+        <field name="name">autofix.vehicle.inspection.form</field>
+        <field name="model">autofix.vehicle.inspection</field>
+        <field name="arch" type="xml">
+            <form string="Vehicle Inspection">
+                <header>
+                    <button name="action_generate_from_template" string="Generate from Template" type="object" class="btn-primary"/>
+                    <button name="action_done" string="Complete" type="object" class="btn-success" invisible="state == 'done'"/>
+                    <button name="action_reset" string="Reset to Draft" type="object" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="reception_id"/>
+                            <field name="template_id"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="inspector_id"/>
+                            <field name="overall_condition"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1" colspan="2"/>
+                    </group>
+                    <notebook>
+                        <page string="Checklist" name="checklist">
+                            <field name="line_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence"/>
+                                    <field name="name"/>
+                                    <field name="category"/>
+                                    <field name="condition" widget="badge" decoration-success="condition == 'good'" decoration-warning="condition == 'fair'" decoration-danger="condition in ('poor', 'critical')"/>
+                                    <field name="notes"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vehicle Inspection Tree View -->
+    <record id="view_vehicle_inspection_tree" model="ir.ui.view">
+        <field name="name">autofix.vehicle.inspection.tree</field>
+        <field name="model">autofix.vehicle.inspection</field>
+        <field name="arch" type="xml">
+            <tree string="Vehicle Inspections">
+                <field name="name"/>
+                <field name="reception_id"/>
+                <field name="inspector_id"/>
+                <field name="date"/>
+                <field name="overall_condition" widget="badge" decoration-success="overall_condition == 'good'" decoration-warning="overall_condition == 'fair'" decoration-danger="overall_condition in ('poor', 'critical')"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'done'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vehicle Inspection Search View -->
+    <record id="view_vehicle_inspection_search" model="ir.ui.view">
+        <field name="name">autofix.vehicle.inspection.search</field>
+        <field name="model">autofix.vehicle.inspection</field>
+        <field name="arch" type="xml">
+            <search string="Search Inspections">
+                <field name="name"/>
+                <field name="reception_id"/>
+                <field name="inspector_id"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Completed" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Today" name="today" domain="[('date', '=', context_today())]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Inspector" name="group_inspector" context="{'group_by': 'inspector_id'}"/>
+                    <filter string="Condition" name="group_condition" context="{'group_by': 'overall_condition'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

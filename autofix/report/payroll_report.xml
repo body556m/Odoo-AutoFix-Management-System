@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="payroll_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: Arial, Helvetica, sans-serif; color: #333;">
+
+                        <!-- ── Header ── -->
+                        <div style="text-align: center; margin-bottom: 25px;">
+                            <h2 style="margin: 0; color: #2c3e50;">AutoFix Management System</h2>
+                            <h3 style="margin: 5px 0 0; color: #7f8c8d;">Monthly Payroll Report</h3>
+                        </div>
+
+                        <!-- ── Meta information ── -->
+                        <table style="width: 100%; margin-bottom: 20px; font-size: 13px;">
+                            <tr>
+                                <td style="width: 50%; vertical-align: top;">
+                                    <strong>Reference:</strong> <t t-esc="o.name"/><br/>
+                                    <strong>Period:</strong> <t t-esc="o.period_label"/><br/>
+                                    <strong>Date Range:</strong>
+                                    <t t-esc="o.date_from" t-options='{"widget": "date"}'/> —
+                                    <t t-esc="o.date_to" t-options='{"widget": "date"}'/>
+                                </td>
+                                <td style="width: 50%; vertical-align: top; text-align: right;">
+                                    <strong>Confirmed By:</strong>
+                                    <t t-if="o.confirmed_by"><t t-esc="o.confirmed_by.name"/></t>
+                                    <t t-else="">—</t><br/>
+                                    <strong>Confirmation Date:</strong>
+                                    <t t-if="o.confirmed_date">
+                                        <t t-esc="o.confirmed_date" t-options='{"widget": "datetime"}'/>
+                                    </t>
+                                    <t t-else="">—</t>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <hr style="border: 1px solid #bdc3c7;"/>
+
+                        <!-- ── Main table ── -->
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12px;">
+                            <thead>
+                                <tr style="background-color: #2c3e50; color: #fff;">
+                                    <th style="padding: 8px 10px; text-align: left; border: 1px solid #ddd;">Mechanic Name</th>
+                                    <th style="padding: 8px 10px; text-align: left; border: 1px solid #ddd;">Job Title</th>
+                                    <th style="padding: 8px 10px; text-align: right; border: 1px solid #ddd;">Base Salary</th>
+                                    <th style="padding: 8px 10px; text-align: center; border: 1px solid #ddd;">WOs Completed</th>
+                                    <th style="padding: 8px 10px; text-align: right; border: 1px solid #ddd;">Bonus</th>
+                                    <th style="padding: 8px 10px; text-align: right; border: 1px solid #ddd;">Deductions</th>
+                                    <th style="padding: 8px 10px; text-align: left; border: 1px solid #ddd;">Deduction Reason</th>
+                                    <th style="padding: 8px 10px; text-align: right; border: 1px solid #ddd;">Net Salary</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.payroll_line_ids" t-as="line">
+                                    <tr t-attf-style="background-color: #{line_index % 2 == 0 and '#f9f9f9' or '#ffffff'};">
+                                        <td style="padding: 6px 10px; border: 1px solid #ddd;">
+                                            <t t-esc="line.employee_name"/>
+                                        </td>
+                                        <td style="padding: 6px 10px; border: 1px solid #ddd;">
+                                            <t t-esc="line.job_title"/>
+                                        </td>
+                                        <td style="padding: 6px 10px; border: 1px solid #ddd; text-align: right;">
+                                            <t t-esc="'%.2f' % line.base_salary"/>
+                                        </td>
+                                        <td style="padding: 6px 10px; border: 1px solid #ddd; text-align: center;">
+                                            <t t-esc="line.wo_completed"/>
+                                        </td>
+                                        <td style="padding: 6px 10px; border: 1px solid #ddd; text-align: right;">
+                                            <t t-esc="'%.2f' % line.bonus_total"/>
+                                        </td>
+                                        <td style="padding: 6px 10px; border: 1px solid #ddd; text-align: right;">
+                                            <t t-esc="'%.2f' % line.deductions"/>
+                                        </td>
+                                        <td style="padding: 6px 10px; border: 1px solid #ddd;">
+                                            <t t-esc="line.deduction_reason or ''"/>
+                                        </td>
+                                        <td style="padding: 6px 10px; border: 1px solid #ddd; text-align: right; font-weight: bold;">
+                                            <t t-esc="'%.2f' % line.net_salary"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <!-- ── Footer row — Totals ── -->
+                            <tfoot>
+                                <tr style="background-color: #2c3e50; color: #fff; font-weight: bold;">
+                                    <td colspan="2" style="padding: 8px 10px; border: 1px solid #ddd;">TOTALS</td>
+                                    <td style="padding: 8px 10px; border: 1px solid #ddd; text-align: right;">
+                                        <t t-esc="'%.2f' % o.total_base_salary"/>
+                                    </td>
+                                    <td style="padding: 8px 10px; border: 1px solid #ddd; text-align: center;">
+                                        <t t-esc="o.wo_count_total"/>
+                                    </td>
+                                    <td style="padding: 8px 10px; border: 1px solid #ddd; text-align: right;">
+                                        <t t-esc="'%.2f' % o.total_bonus"/>
+                                    </td>
+                                    <td style="padding: 8px 10px; border: 1px solid #ddd; text-align: right;">
+                                        <t t-esc="'%.2f' % o.total_deductions"/>
+                                    </td>
+                                    <td style="padding: 8px 10px; border: 1px solid #ddd;"></td>
+                                    <td style="padding: 8px 10px; border: 1px solid #ddd; text-align: right;">
+                                        <t t-esc="'%.2f' % o.total_net"/>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <!-- ── Summary Box ── -->
+                        <div style="border: 2px solid #2c3e50; padding: 15px; margin-bottom: 20px; background-color: #ecf0f1;">
+                            <h4 style="margin: 0 0 10px; color: #2c3e50;">Payroll Summary</h4>
+                            <table style="font-size: 13px;">
+                                <tr>
+                                    <td style="padding: 3px 15px 3px 0;"><strong>Total Mechanics:</strong></td>
+                                    <td><t t-esc="len(o.payroll_line_ids)"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 3px 15px 3px 0;"><strong>Total Work Orders Completed:</strong></td>
+                                    <td><t t-esc="o.wo_count_total"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 3px 15px 3px 0;"><strong>Total Payroll Amount:</strong></td>
+                                    <td style="font-weight: bold; color: #27ae60;">
+                                        <t t-esc="'%.2f' % o.total_net"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- ── Report Footer ── -->
+                        <div style="text-align: center; font-size: 11px; color: #95a5a6; margin-top: 30px;">
+                            <p>
+                                Generated:
+                                <t t-if="o.confirmed_date">
+                                    <t t-esc="o.confirmed_date" t-options='{"widget": "datetime"}'/>
+                                </t>
+                                <t t-else="">—</t>
+                            </p>
+                            <p style="margin-top: 5px;">AutoFix Management System — Confidential</p>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

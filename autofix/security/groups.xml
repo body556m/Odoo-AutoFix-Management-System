@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- AutoFix Category -->
+        <record id="module_category_autofix" model="ir.module.category">
+            <field name="name">AutoFix</field>
+            <field name="description">AutoFix Workshop Management</field>
+            <field name="sequence">100</field>
+        </record>
+
+        <!-- Mechanic Group (base level) -->
+        <record id="group_autofix_mechanic" model="res.groups">
+            <field name="name">AutoFix / Mechanic</field>
+            <field name="category_id" ref="module_category_autofix"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Accountant Group -->
+        <record id="group_autofix_accountant" model="res.groups">
+            <field name="name">AutoFix / Accountant</field>
+            <field name="category_id" ref="module_category_autofix"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Receptionist Group (implies Mechanic) -->
+        <record id="group_autofix_receptionist" model="res.groups">
+            <field name="name">AutoFix / Receptionist</field>
+            <field name="category_id" ref="module_category_autofix"/>
+            <field name="implied_ids" eval="[(4, ref('group_autofix_mechanic'))]"/>
+        </record>
+
+        <!-- Manager Group (implies all others - must be last) -->
+        <record id="group_autofix_manager" model="res.groups">
+            <field name="name">AutoFix / Manager</field>
+            <field name="category_id" ref="module_category_autofix"/>
+            <field name="implied_ids" eval="[(4, ref('group_autofix_receptionist')), (4, ref('group_autofix_mechanic')), (4, ref('group_autofix_accountant'))]"/>
+        </record>
+    </data>
+</odoo>

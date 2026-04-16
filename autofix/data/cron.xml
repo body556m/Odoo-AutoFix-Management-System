@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Cron 1: 15-Day Warning for Unpaid Invoices -->
+        <record id="cron_warn_unpaid_invoices" model="ir.cron">
+            <field name="name">AutoFix: Warn Unpaid Invoices (15 Days)</field>
+            <field name="model_id" ref="model_autofix_service_reception"/>
+            <field name="code">model._cron_warn_unpaid_invoices()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">True</field>
+            <field name="nextcall">2026-03-26 00:00:00</field>
+            <field name="doall">True</field>
+        </record>
+
+        <!-- Cron 2: 30-Day Auto-Cancellation for Unpaid Invoices -->
+        <record id="cron_cancel_unpaid_invoices" model="ir.cron">
+            <field name="name">AutoFix: Cancel Unpaid Invoices (30 Days)</field>
+            <field name="model_id" ref="model_autofix_service_reception"/>
+            <field name="code">model._cron_cancel_unpaid_invoices()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">True</field>
+            <field name="nextcall">2026-03-26 00:00:00</field>
+            <field name="doall">True</field>
+        </record>
+
+        <!-- Cron 3: Daily Summary Email to Managers -->
+        <record id="cron_daily_summary" model="ir.cron">
+            <field name="name">AutoFix Daily Summary</field>
+            <field name="model_id" ref="model_autofix_work_order"/>
+            <field name="code">model.send_daily_summary()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="active">True</field>
+            <field name="nextcall">2026-03-28 20:00:00</field>
+            <field name="doall">False</field>
+        </record>
+    </data>
+</odoo>

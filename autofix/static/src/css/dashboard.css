@@ -1,0 +1,119 @@
+/* AutoFix Dashboard Styles */
+
+.autofix-dashboard {
+    padding: 24px;
+    background-color: #f8f9fa;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.autofix-dashboard-header {
+    margin-bottom: 24px;
+}
+
+.autofix-dashboard-header h2 {
+    margin: 0;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+/* ── KPI Cards ── */
+.autofix-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.autofix-kpi-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.15s;
+    border: 1px solid #e9ecef;
+}
+
+.autofix-kpi-card:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-3px);
+}
+
+.kpi-icon {
+    font-size: 28px;
+    color: #714B67;
+    margin-bottom: 8px;
+}
+
+.kpi-value {
+    font-size: 26px;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.kpi-label {
+    font-size: 13px;
+    color: #6c757d;
+    margin-top: 4px;
+}
+
+.kpi-money .kpi-value {
+    color: #27ae60;
+}
+
+.kpi-money .kpi-icon {
+    color: #27ae60;
+}
+
+.kpi-small {
+    font-size: 14px;
+    font-weight: 400;
+    color: #6c757d;
+    margin-left: 4px;
+}
+
+/* ── Tables ── */
+.autofix-tables-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+@media (max-width: 992px) {
+    .autofix-tables-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.autofix-table-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+}
+
+.autofix-table-card h4 {
+    margin-bottom: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+.autofix-table-card h4 i {
+    margin-right: 8px;
+    color: #714B67;
+}
+
+.autofix-table-card .table {
+    margin-bottom: 0;
+}
+
+.autofix-table-card .table thead th {
+    border-top: none;
+    font-size: 13px;
+    color: #6c757d;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}

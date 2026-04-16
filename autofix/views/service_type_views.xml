@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Service Type Form View -->
+    <record id="view_service_type_form" model="ir.ui.view">
+        <field name="name">autofix.service.type.form</field>
+        <field name="model">autofix.service.type</field>
+        <field name="arch" type="xml">
+            <form string="Service Type">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="category"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="default_labor_cost"/>
+                            <field name="estimated_duration"/>
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1" colspan="2"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Service Type Tree View -->
+    <record id="view_service_type_tree" model="ir.ui.view">
+        <field name="name">autofix.service.type.tree</field>
+        <field name="model">autofix.service.type</field>
+        <field name="arch" type="xml">
+            <tree string="Service Types">
+                <field name="name"/>
+                <field name="category"/>
+                <field name="default_labor_cost"/>
+                <field name="estimated_duration"/>
+                <field name="active" widget="boolean"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Service Type Search View -->
+    <record id="view_service_type_search" model="ir.ui.view">
+        <field name="name">autofix.service.type.search</field>
+        <field name="model">autofix.service.type</field>
+        <field name="arch" type="xml">
+            <search string="Search Service Types">
+                <field name="name"/>
+                <field name="category"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Category" name="group_category" context="{'group_by': 'category'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

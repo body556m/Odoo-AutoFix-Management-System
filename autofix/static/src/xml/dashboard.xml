@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="autofix.AutoFixDashboard">
+        <div class="o_action">
+            <div class="o_content autofix-dashboard">
+            <!-- Header -->
+            <div class="autofix-dashboard-header">
+                <h2>AutoFix — Management Dashboard</h2>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="autofix-kpi-grid">
+                <div class="autofix-kpi-card" t-on-click="openCars">
+                    <div class="kpi-icon"><i class="fa fa-car"/></div>
+                    <div class="kpi-value" t-esc="state.total_cars"/>
+                    <div class="kpi-label">Total Cars</div>
+                </div>
+
+                <div class="autofix-kpi-card" t-on-click="openTodayReceptions">
+                    <div class="kpi-icon"><i class="fa fa-calendar-check-o"/></div>
+                    <div class="kpi-value" t-esc="state.today_receptions"/>
+                    <div class="kpi-label">Today's Receptions</div>
+                </div>
+
+                <div class="autofix-kpi-card" t-on-click="openOpenWorkOrders">
+                    <div class="kpi-icon"><i class="fa fa-wrench"/></div>
+                    <div class="kpi-value" t-esc="state.open_work_orders"/>
+                    <div class="kpi-label">Open Work Orders</div>
+                </div>
+
+                <div class="autofix-kpi-card" t-on-click="openDoneWorkOrdersMonth">
+                    <div class="kpi-icon"><i class="fa fa-check-circle"/></div>
+                    <div class="kpi-value" t-esc="state.done_work_orders_month"/>
+                    <div class="kpi-label">Completed This Month</div>
+                </div>
+
+
+                <div class="autofix-kpi-card kpi-money" t-on-click="openMonthPettyCash">
+                    <div class="kpi-icon"><i class="fa fa-credit-card"/></div>
+                    <div class="kpi-value"><t t-esc="formatCurrency(state.month_petty_cash)"/></div>
+                    <div class="kpi-label">Petty Cash This Month</div>
+                </div>
+
+                <div class="autofix-kpi-card kpi-money" t-on-click="openMonthWoExpenses">
+                    <div class="kpi-icon"><i class="fa fa-cogs"/></div>
+                    <div class="kpi-value"><t t-esc="formatCurrency(state.month_wo_expenses)"/></div>
+                    <div class="kpi-label">WO Expenses This Month</div>
+                </div>
+
+                <div class="autofix-kpi-card" t-on-click="openStockIntegration">
+                    <div class="kpi-icon"><i class="fa fa-truck"/></div>
+                    <div class="kpi-value">
+                        <t t-esc="state.stock_integration_count"/>
+                        <span class="kpi-small">(<t t-esc="state.stock_integration_qty"/> items)</span>
+                    </div>
+                    <div class="kpi-label">Stock Integration</div>
+                </div>
+            </div>
+
+            <!-- Tables -->
+            <div class="autofix-tables-grid">
+                <!-- Open Work Orders Table -->
+                <div class="autofix-table-card">
+                    <h4><i class="fa fa-list-alt"/> Open Work Orders</h4>
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>Reference</th>
+                                <th>Car</th>
+                                <th>Mechanic</th>
+                                <th>Status</th>
+                                <th>Start Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="state.open_work_orders_list" t-as="wo" t-key="wo.name">
+                                <tr>
+                                    <td t-esc="wo.name"/>
+                                    <td t-esc="wo.car"/>
+                                    <td t-esc="wo.mechanic"/>
+                                    <td>
+                                        <span t-attf-class="badge #{wo.state === 'pending' ? 'text-bg-warning' : 'text-bg-info'}" t-esc="getStateLabel(wo.state)"/>
+                                    </td>
+                                    <td t-esc="wo.create_date"/>
+                                </tr>
+                            </t>
+                            <t t-if="!state.open_work_orders_list.length">
+                                <tr><td colspan="5" class="text-center text-muted">No open work orders</td></tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Mechanic Performance Table -->
+                <div class="autofix-table-card">
+                    <h4><i class="fa fa-users"/> Mechanic Performance — This Month</h4>
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr>
+                                <th>Mechanic</th>
+                                <th>Completed</th>
+                                <th>Open</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="state.mechanic_performance" t-as="mech" t-key="mech.mechanic">
+                                <tr>
+                                    <td t-esc="mech.mechanic"/>
+                                    <td><span class="badge text-bg-success" t-esc="mech.done"/></td>
+                                    <td><span class="badge text-bg-warning" t-esc="mech.open"/></td>
+                                </tr>
+                            </t>
+                            <t t-if="!state.mechanic_performance.length">
+                                <tr><td colspan="3" class="text-center text-muted">No data for this month</td></tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            </div>
+        </div>
+    </t>
+</templates>

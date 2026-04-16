@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Warranty Form View -->
+    <record id="view_warranty_form" model="ir.ui.view">
+        <field name="name">autofix.warranty.form</field>
+        <field name="model">autofix.warranty</field>
+        <field name="arch" type="xml">
+            <form string="Warranty">
+                <header>
+                    <button name="action_claim" string="File Claim" type="object" class="btn-primary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="active,expired,claimed,void"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="reception_id"/>
+                            <field name="work_order_id"/>
+                            <field name="car_id"/>
+                        </group>
+                        <group>
+                            <field name="warranty_type"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="duration_months"/>
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1" colspan="2"/>
+                    </group>
+                    <notebook>
+                        <page string="Claims" name="claims">
+                            <field name="claim_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="claim_date"/>
+                                    <field name="state" widget="badge"/>
+                                    <field name="resolution"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Warranty Tree View -->
+    <record id="view_warranty_tree" model="ir.ui.view">
+        <field name="name">autofix.warranty.tree</field>
+        <field name="model">autofix.warranty</field>
+        <field name="arch" type="xml">
+            <tree string="Warranties">
+                <field name="name"/>
+                <field name="car_id"/>
+                <field name="warranty_type"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="state" widget="badge" decoration-success="state == 'active'" decoration-warning="state == 'expired'" decoration-info="state == 'claimed'" decoration-danger="state == 'void'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Warranty Search View -->
+    <record id="view_warranty_search" model="ir.ui.view">
+        <field name="name">autofix.warranty.search</field>
+        <field name="model">autofix.warranty</field>
+        <field name="arch" type="xml">
+            <search string="Search Warranties">
+                <field name="name"/>
+                <field name="car_id"/>
+                <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
+                <filter string="Expired" name="expired" domain="[('state', '=', 'expired')]"/>
+                <filter string="Expiring Soon" name="expiring_soon" domain="[('state', '=', 'active'), ('end_date', '&lt;=', (context_today() + datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Warranty Claim Form View -->
+    <record id="view_warranty_claim_form" model="ir.ui.view">
+        <field name="name">autofix.warranty.claim.form</field>
+        <field name="model">autofix.warranty.claim</field>
+        <field name="arch" type="xml">
+            <form string="Warranty Claim">
+                <header>
+                    <button name="action_approve" string="Approve" type="object" class="btn-success" invisible="state != 'pending'"/>
+                    <button name="action_reject" string="Reject" type="object" class="btn-danger" invisible="state != 'pending'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="warranty_id"/>
+                            <field name="claim_date"/>
+                            <field name="claimed_by"/>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                            <field name="resolution"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Warranty Claim Tree View -->
+    <record id="view_warranty_claim_tree" model="ir.ui.view">
+        <field name="name">autofix.warranty.claim.tree</field>
+        <field name="model">autofix.warranty.claim</field>
+        <field name="arch" type="xml">
+            <tree string="Warranty Claims">
+                <field name="name"/>
+                <field name="warranty_id"/>
+                <field name="claim_date"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

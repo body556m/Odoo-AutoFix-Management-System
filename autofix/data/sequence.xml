@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_autofix_service_reception" model="ir.sequence">
+            <field name="name">AutoFix Service Reception</field>
+            <field name="code">autofix.service.reception</field>
+            <field name="prefix">REC/%(year)s/%(month)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_autofix_work_order" model="ir.sequence">
+            <field name="name">AutoFix Work Order</field>
+            <field name="code">autofix.work.order</field>
+            <field name="prefix">WO/%(year)s/%(month)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_autofix_petty_cash" model="ir.sequence">
+            <field name="name">AutoFix Petty Cash</field>
+            <field name="code">autofix.petty.cash</field>
+            <field name="prefix">PC/%(year)s/%(month)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_autofix_inventory_audit" model="ir.sequence">
+            <field name="name">AutoFix Inventory Audit</field>
+            <field name="code">autofix.inventory.audit</field>
+            <field name="prefix">AUD/%(year)s/%(month)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_autofix_payroll" model="ir.sequence">
+            <field name="name">AutoFix Payroll</field>
+            <field name="code">autofix.payroll</field>
+            <field name="prefix">PAY/%(year)s/%(month)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_autofix_appointment" model="ir.sequence">
+            <field name="name">AutoFix Appointment</field>
+            <field name="code">autofix.appointment</field>
+            <field name="prefix">APT/%(year)s/%(month)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_autofix_vehicle_inspection" model="ir.sequence">
+            <field name="name">AutoFix Vehicle Inspection</field>
+            <field name="code">autofix.vehicle.inspection</field>
+            <field name="prefix">INS/%(year)s/%(month)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_autofix_warranty" model="ir.sequence">
+            <field name="name">AutoFix Warranty</field>
+            <field name="code">autofix.warranty</field>
+            <field name="prefix">WRT/%(year)s/%(month)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_autofix_warranty_claim" model="ir.sequence">
+            <field name="name">AutoFix Warranty Claim</field>
+            <field name="code">autofix.warranty.claim</field>
+            <field name="prefix">WRC/%(year)s/%(month)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_autofix_customer_feedback" model="ir.sequence">
+            <field name="name">AutoFix Customer Feedback</field>
+            <field name="code">autofix.customer.feedback</field>
+            <field name="prefix">FB/%(year)s/%(month)s/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ============================================================ -->
+        <!-- Wizard Action                                                 -->
+        <!-- ============================================================ -->
+        <record id="action_autofix_payroll_wizard" model="ir.actions.act_window">
+            <field name="name">Generate Payroll</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.payroll.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <!-- Wizard Form View -->
+        <record id="view_autofix_payroll_wizard_form" model="ir.ui.view">
+            <field name="name">autofix.payroll.wizard.form</field>
+            <field name="model">autofix.payroll.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Generate Monthly Payroll">
+                    <group>
+                        <field name="month"/>
+                        <field name="year"/>
+                        <field name="bonus_per_wo"/>
+                    </group>
+                    <footer>
+                        <button name="action_generate_payroll"
+                                string="Generate Payroll"
+                                type="object"
+                                class="oe_highlight"/>
+                        <button string="Cancel" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- ============================================================ -->
+        <!-- Payroll List Action                                           -->
+        <!-- ============================================================ -->
+        <record id="action_autofix_payroll" model="ir.actions.act_window">
+            <field name="name">Payroll Runs</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">autofix.payroll</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                No payroll runs yet. Use "Generate Payroll" to create one.
+              </p>
+            </field>
+        </record>
+
+        <!-- ============================================================ -->
+        <!-- Payroll Tree View                                             -->
+        <!-- ============================================================ -->
+        <record id="view_autofix_payroll_tree" model="ir.ui.view">
+            <field name="name">autofix.payroll.tree</field>
+            <field name="model">autofix.payroll</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Payroll Runs"
+                      decoration-success="state=='confirmed'"
+                      decoration-warning="state=='draft'">
+                    <field name="name"/>
+                    <field name="period_label"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="wo_count_total"/>
+                    <field name="total_net" sum="Total Net"/>
+                    <field name="state" widget="badge"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- ============================================================ -->
+        <!-- Payroll Search View                                           -->
+        <!-- ============================================================ -->
+        <record id="view_autofix_payroll_search" model="ir.ui.view">
+            <field name="name">autofix.payroll.search</field>
+            <field name="model">autofix.payroll</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Search Payroll">
+                    <field name="name"/>
+                    <field name="period_label"/>
+                    <filter string="Draft" name="draft"
+                            domain="[('state','=','draft')]"/>
+                    <filter string="Confirmed" name="confirmed"
+                            domain="[('state','=','confirmed')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status" name="group_state"
+                                context="{'group_by': 'state'}"/>
+                        <filter string="Period" name="group_period"
+                                context="{'group_by': 'period_label'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- ============================================================ -->
+        <!-- Payroll Form View                                             -->
+        <!-- ============================================================ -->
+        <record id="view_autofix_payroll_form" model="ir.ui.view">
+            <field name="name">autofix.payroll.form</field>
+            <field name="model">autofix.payroll</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Payroll Run">
+                    <header>
+                        <button name="action_confirm"
+                                string="Confirm"
+                                type="object"
+                                class="oe_highlight"
+                                invisible="state == 'confirmed'"/>
+                        <button name="action_reset_to_draft"
+                                string="Reset to Draft"
+                                type="object"
+                                invisible="state == 'draft'"/>
+                        <button name="action_print_report"
+                                string="Print Report"
+                                type="object"
+                                invisible="not id"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,confirmed"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1><field name="name"/></h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="period_label" readonly="1"/>
+                                <field name="date_from" readonly="1"/>
+                                <field name="date_to" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="confirmed_by" readonly="1"/>
+                                <field name="confirmed_date" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="lines" string="Payroll Lines">
+                                <field name="payroll_line_ids">
+                                    <tree string="Payroll Lines" editable="bottom">
+                                        <field name="employee_name"/>
+                                        <field name="job_title"/>
+                                        <field name="base_salary" readonly="1"/>
+                                        <field name="wo_completed" readonly="1"/>
+                                        <field name="bonus_per_wo" readonly="1"/>
+                                        <field name="bonus_total" readonly="1"/>
+                                        <field name="deductions"/>
+                                        <field name="deduction_reason"/>
+                                        <field name="net_salary" readonly="1"/>
+                                    </tree>
+                                </field>
+                                <group>
+                                    <group string="Totals">
+                                        <field name="total_base_salary" readonly="1"/>
+                                        <field name="total_bonus" readonly="1"/>
+                                        <field name="total_deductions" readonly="1"/>
+                                        <field name="total_net" readonly="1"/>
+                                        <field name="wo_count_total" readonly="1"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page name="notes" string="Notes">
+                                <field name="notes"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- ============================================================ -->
+        <!-- hr.employee form view inheritance — add autofix_wage          -->
+        <!-- ============================================================ -->
+        <record id="view_hr_employee_form_autofix_wage" model="ir.ui.view">
+            <field name="name">hr.employee.form.autofix.wage</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='hr_settings']" position="inside">
+                    <group string="AutoFix Payroll">
+                        <field name="autofix_wage"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
